@@ -1,0 +1,18 @@
+# 배포용
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DEPLOY_DB_URL}
+    username: ${DEPLOY_DB_USERNAME}
+    password: ${DEPLOY_DB_PASSWORD}
+
+  sql:
+    init:
+      mode: never
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        hbm2ddl:
+          auto: update  #create, update
+        default_batch_fetch_size: 1000
