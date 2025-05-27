@@ -60,7 +60,7 @@ jobs:
             sudo docker rm dagong-container || true
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}
             sudo docker run -d \
-              --name nurigil-container \
+              --name dagong-container \
               -p 8080:8080 \
               -e SPRING_PROFILES_ACTIVE=prod \
               -e DEPLOY_DB_USERNAME="${{ secrets.DEPLOY_DB_USERNAME }}" \
