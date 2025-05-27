@@ -1,7 +1,7 @@
-package com.capstone2.capstone2.global.apiPayload;
+package com.capstone2.capstone2.global.common.response;
 
-import com.capstone2.capstone2.global.apiPayload.code.BaseCode;
-import com.capstone2.capstone2.global.apiPayload.code.status.SuccessStatus;
+import com.capstone2.capstone2.global.error.code.status.BaseCode;
+import com.capstone2.capstone2.global.error.code.status.SuccessStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;

@@ -1,6 +1,6 @@
-package com.capstone2.capstone2.global.exception.handler;
+package com.capstone2.capstone2.domain.member.handler;
 
-import com.capstone2.capstone2.global.apiPayload.code.BaseErrorCode;
+import com.capstone2.capstone2.global.error.code.status.BaseErrorCode;
 import com.capstone2.capstone2.global.exception.GeneralException;
 
 public class MemberHandler extends GeneralException {
