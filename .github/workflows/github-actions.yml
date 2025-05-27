@@ -63,6 +63,7 @@ jobs:
               --name dagong-container \
               -p 8080:8080 \
               -e SPRING_PROFILES_ACTIVE=prod \
+              -e DEPLOY_DB_URL="${{ secrets.DEPLOY_DB_URL }}" \
               -e DEPLOY_DB_USERNAME="${{ secrets.DEPLOY_DB_USERNAME }}" \
               -e DEPLOY_DB_PASSWORD="${{ secrets.DEPLOY_DB_PASSWORD }}" \
               ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}
