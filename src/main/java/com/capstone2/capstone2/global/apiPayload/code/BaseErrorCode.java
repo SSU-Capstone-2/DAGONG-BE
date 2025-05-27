@@ -1,4 +1,4 @@
-package com.capstone2.capstone2.global.error.code.status;
+package com.capstone2.capstone2.global.apiPayload.code;
 
 public interface BaseErrorCode {
     public ErrorReasonDTO getReason();
