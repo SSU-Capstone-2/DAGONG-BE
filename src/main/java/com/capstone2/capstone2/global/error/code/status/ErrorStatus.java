@@ -1,7 +1,5 @@
-package com.capstone2.capstone2.global.apiPayload.code.status;
+package com.capstone2.capstone2.global.error.code.status;
 
-import com.capstone2.capstone2.global.apiPayload.code.BaseErrorCode;
-import com.capstone2.capstone2.global.apiPayload.code.ErrorReasonDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.capstone2.capstone2.global.apiPayload.code;
+package com.capstone2.capstone2.global.error.code.status;
 
 import lombok.Builder;
 import lombok.Getter;
