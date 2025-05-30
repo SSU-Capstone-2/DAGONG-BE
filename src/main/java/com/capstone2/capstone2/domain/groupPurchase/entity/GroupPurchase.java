@@ -25,26 +25,40 @@ public class GroupPurchase extends BaseEntity {
     @Column(length = 300)
     private String content;
 
-    @Column(name = "pickup_place")
-    private String pickupPlace;
+    @Column
+    private String place;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
 
-    private LocalDateTime deadline;
-
+    // 공구 상품 이름
     @Column(nullable = false)
     private String name;
 
+    // 공구 상품 수량
     @Column(nullable = false)
     private Integer quantity;
 
+    // 공구 상품 가격
     @Column(nullable = false)
     private Integer price;
 
+    // 작성자
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "writer_id", nullable = false)  // 작성자
+    @JoinColumn(name = "writer_id", nullable = false)
     private Member writer;
 
+    // 공구 대분류
+    private String category1;
+
+    // 공구 소분류
+    private String category2;
+
+    private Integer view;
+
+    private Integer like;
+
+    // 마감 예측 시간
+    private LocalDateTime deadline;
 }
