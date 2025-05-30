@@ -1,8 +1,6 @@
 package com.capstone2.capstone2.domain.naverSearch.converter;
 
-import com.capstone2.capstone2.domain.naverSearch.dto.NaverSearchItemDTO;
-import com.capstone2.capstone2.domain.naverSearch.dto.NaverSearchResponseDTO;
-import com.capstone2.capstone2.domain.naverSearch.dto.NaverSearchSimpleResponseDTO;
+import com.capstone2.capstone2.domain.naverSearch.dto.NaverSearchResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,9 +11,10 @@ public class NaverSearchConverter {
         return input == null ? null : input.replaceAll("<[^>]*>", "");
     }
 
-    public static NaverSearchSimpleResponseDTO toSimpleResponse(NaverSearchResponseDTO response, int page, int size) {
-        List<NaverSearchItemDTO> items = response.getItems().stream()
-                .map(item -> NaverSearchItemDTO.builder()
+    // NaverSearchConverter.toSimpleResponseDTO(response, page, size)
+    public static NaverSearchResponse.SimpleResponseDTO toSimpleResponseDTO(NaverSearchResponse.FullResponseDTO response, int page, int size) {
+        List<NaverSearchResponse.ItemDTO> items = response.getItems().stream()
+                .map(item -> NaverSearchResponse.ItemDTO.builder()
                         .title(removeHtmlTags(item.getTitle()))
                         .link(item.getLink())
                         .image(item.getImage())
@@ -26,7 +25,7 @@ public class NaverSearchConverter {
                         .build())
                 .collect(Collectors.toList());
 
-        return NaverSearchSimpleResponseDTO.builder()
+        return NaverSearchResponse.SimpleResponseDTO.builder()
                 .totalCount(response.getTotal())
                 .page(page)
                 .pageSize(size)

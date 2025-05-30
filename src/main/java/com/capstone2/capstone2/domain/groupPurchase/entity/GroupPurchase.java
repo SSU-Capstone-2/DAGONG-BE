@@ -1,6 +1,5 @@
 package com.capstone2.capstone2.domain.groupPurchase.entity;
 
-
 import com.capstone2.capstone2.domain.member.entity.Member;
 import com.capstone2.capstone2.domain.model.enums.Status;
 import com.capstone2.capstone2.domain.model.entity.BaseEntity;
@@ -9,6 +8,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "group_purchase")
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -44,6 +44,9 @@ public class GroupPurchase extends BaseEntity {
     @Column(nullable = false)
     private Integer price;
 
+    // 참여 인원 수
+    private Integer participants;
+
     // 작성자
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "writer_id", nullable = false)
@@ -55,9 +58,9 @@ public class GroupPurchase extends BaseEntity {
     // 공구 소분류
     private String category2;
 
-    private Integer view;
+    private Integer views;
 
-    private Integer like;
+    private Integer likes;
 
     // 마감 예측 시간
     private LocalDateTime deadline;

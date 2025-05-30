@@ -1,16 +1,15 @@
-package com.capstone2.capstone2.domain.naverSearch.client;
+package com.capstone2.capstone2.domain.naverSearch.service;
 
 import com.capstone2.capstone2.domain.naverSearch.converter.NaverSearchConverter;
-import com.capstone2.capstone2.domain.naverSearch.dto.NaverSearchResponseDTO;
-import com.capstone2.capstone2.domain.naverSearch.dto.NaverSearchSimpleResponseDTO;
+import com.capstone2.capstone2.domain.naverSearch.dto.NaverSearchResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-@Component
+@Service
 @RequiredArgsConstructor
-public class NaverSearchClient {
+public class NaverSearchServiceImpl implements NaverSearchService {
 
     private final RestClient restSearchClient;
 
@@ -20,10 +19,10 @@ public class NaverSearchClient {
     @Value("${naver.search.client-secret}")
     private String clientSecret;
 
-    public NaverSearchSimpleResponseDTO search(String query, int page, int size) {
+    public NaverSearchResponse.SimpleResponseDTO search(String query, int page, int size) {
         int start = (page - 1) * size + 1;
 
-        NaverSearchResponseDTO response = restSearchClient.get()
+        NaverSearchResponse.FullResponseDTO response = restSearchClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/v1/search/shop.json")
                         .queryParam("query", query)
@@ -34,10 +33,8 @@ public class NaverSearchClient {
                 .header("X-Naver-Client-Id", clientId)
                 .header("X-Naver-Client-Secret", clientSecret)
                 .retrieve()
-                .body(NaverSearchResponseDTO.class);
+                .body(NaverSearchResponse.FullResponseDTO.class);
 
-
-        return NaverSearchConverter.toSimpleResponse(response, page, size);
-
+        return NaverSearchConverter.toSimpleResponseDTO(response, page, size);
     }
 }

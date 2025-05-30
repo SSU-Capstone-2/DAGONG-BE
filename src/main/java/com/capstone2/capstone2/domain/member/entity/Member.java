@@ -1,10 +1,15 @@
 package com.capstone2.capstone2.domain.member.entity;
 
+import com.capstone2.capstone2.domain.groupPurchase.entity.GroupPurchase;
+import com.capstone2.capstone2.domain.groupPurchase.entity.Participation;
 import com.capstone2.capstone2.domain.model.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -29,4 +34,10 @@ public class Member extends BaseEntity {
     private String profile_url;
 
     private String category; // 이게 왜 필요했었죠?
+
+    @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GroupPurchase> groupPurchases = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Participation> participations = new ArrayList<>();
 }
