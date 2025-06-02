@@ -32,7 +32,7 @@ public class Member extends BaseEntity {
     private String nickname;
 
     @Column(nullable = false)
-    private String kakaoId;
+    private Long kakaoId;
 
     private String profile_url;
 

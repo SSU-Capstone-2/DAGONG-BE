@@ -17,6 +17,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
+
 @Component
 @Slf4j
 public class KakaoUtil {
@@ -58,5 +60,38 @@ public class KakaoUtil {
         }
         return oAuthToken;
 
+    }
+
+    public KakaoDTO.KakaoProfile requestProfile(KakaoDTO.OAuthToken oAuthToken) {
+        System.out.println("🔥 KakaoUtil.requestProfile 시작됨");   // << 이 로그가 안 찍히면 호출 자체가 되지 않는 것
+
+        RestTemplate restTemplate2 = new RestTemplate();
+        HttpHeaders headers2 = new HttpHeaders();
+
+        headers2.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+        headers2.add("Authorization", "Bearer " + oAuthToken.getAccess_token());
+
+        HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest = new HttpEntity<>(headers2);
+
+        ResponseEntity<String> response2 = restTemplate2.exchange(
+                "https://kapi.kakao.com/v2/user/me",
+                HttpMethod.POST,
+                kakaoProfileRequest,
+                String.class);
+
+
+        ObjectMapper objectMapper = new ObjectMapper();  // ✅ 선언 추가
+
+        KakaoDTO.KakaoProfile kakaoProfile;  // ✅ 선언 추가
+
+        try {
+            kakaoProfile = objectMapper.readValue(response2.getBody(), KakaoDTO.KakaoProfile.class);
+        } catch (JsonProcessingException e) {
+            System.out.println("🔥 이메일 출력");
+            log.info(Arrays.toString(e.getStackTrace()));
+            throw new AuthException(ErrorStatus.AUTH_INVALID_CODE);
+        }
+
+        return kakaoProfile;
     }
 }

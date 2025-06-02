@@ -10,4 +10,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/member")
 @Tag(name = "멤버 API", description = "멤버 API입니다.")
 public class MemberController {
+
 }
