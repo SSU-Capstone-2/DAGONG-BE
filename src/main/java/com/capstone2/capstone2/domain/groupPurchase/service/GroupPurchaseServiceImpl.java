@@ -18,7 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.web.config.PageableHandlerMethodArgumentResolverCustomizer;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,7 +44,7 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
                 GroupPurchaseConverter.toGroupPurchase(member, request)
         );
 
-        GroupPurchaseImage image = GroupPurchaseConverter.toGroupPurchaseImage(groupPurchase, request.getImage());
+        GroupPurchaseImage image = GroupPurchaseConverter.toGroupPurchaseImage(groupPurchase, request.getImageUrl());
         groupPurchaseImageRepository.save(image);
 
         return groupPurchase;
@@ -62,9 +61,12 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
 
     // 공구 상세 조회
     @Override
+    @Transactional
     public GroupPurchaseResponse.GroupPurchaseDetailDTO getGroupPurchaseDetail(Long purchaseId) {
         GroupPurchase groupPurchase = groupPurchaseRepository.findById(purchaseId)
                 .orElseThrow(() -> new GroupPurchaseHandler(ErrorStatus.GROUP_PURCHASE_ID_NULL));
+
+        groupPurchase.increaseViews(); // 조회 시 조회수 1 증가
 
         String writerName = groupPurchase.getWriter().getNickname();
         List<String> imageUrls = groupPurchase.getGroupPurchaseImages().stream()
@@ -73,5 +75,16 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
 
         GroupPurchaseResponse.GroupPurchaseDetailDTO response = GroupPurchaseConverter.toGroupPurchaseDetailDTO(groupPurchase, writerName, imageUrls);
         return response;
+    }
+
+    // 공구 정보 수정
+    @Override
+    @Transactional
+    public GroupPurchase updateGroupPurchase(Long groupPurchaseId, GroupPurchaseRequest.GroupPurchaseUpdateDTO request) {
+        GroupPurchase groupPurchase = groupPurchaseRepository.findById(groupPurchaseId)
+                .orElseThrow(() -> new GroupPurchaseHandler(ErrorStatus.GROUP_PURCHASE_ID_NULL));
+
+        groupPurchase.updateGroupPurchase(request);
+        return groupPurchase;
     }
 }

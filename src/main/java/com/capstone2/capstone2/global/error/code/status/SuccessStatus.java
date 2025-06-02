@@ -21,6 +21,8 @@ public enum SuccessStatus implements BaseCode {
     GROUP_PURCHASE_CREATE_OK(HttpStatus.OK, "GROUP_PURCHASE2001", "공동 구매 생성이 완료되었습니다."),
     GROUP_PURCHASE_FETCH_ALL_OK(HttpStatus.OK, "GROUP_PURCHASE2002", "공동 구매 전체 조회가 완료되었습니다."),
     GROUP_PURCHASE_FETCH_DETAIL_OK(HttpStatus.OK, "GROUP_PURCHASE2003", "공동 구매 상세 조회가 완료되었습니다."),
+    GROUP_PURCHASE_UPDATE_OK(HttpStatus.OK, "GROUP_PURCHASE2004", "공동 구매 정보 수정이 완료되었습니다."),
+
     ;
 
     private final HttpStatus httpStatus;
