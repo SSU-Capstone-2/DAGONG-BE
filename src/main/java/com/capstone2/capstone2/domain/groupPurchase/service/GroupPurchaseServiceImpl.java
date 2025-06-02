@@ -113,4 +113,21 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
 
         return groupPurchases.map(GroupPurchaseConverter::toGroupPurchaseListDTO);
     }
+
+
+    // 카테고리 별 공구 목록 조회
+    @Override
+    public Page<GroupPurchaseResponse.GroupPurchaseListDTO> getGroupPurchasesByCategory(String category1, String category2, int page, int size) {
+        Pageable pageable = PageRequest.of(page -1 , size, Sort.by(Sort.Direction.DESC, "createdAt"));
+
+        Page<GroupPurchase> groupPurchases;
+
+        if (category2 != null && !category2.isBlank()) {
+            groupPurchases = groupPurchaseRepository.findByCategory1AndCategory2(category1, category2, pageable);
+        } else {
+            groupPurchases = groupPurchaseRepository.findByCategory1(category1, pageable);
+        }
+
+        return groupPurchases.map(GroupPurchaseConverter::toGroupPurchaseListDTO);
+    }
 }
