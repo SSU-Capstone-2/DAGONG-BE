@@ -26,6 +26,9 @@ public class Member extends BaseEntity {
     @Column(length = 30, nullable = false)
     private String nickname;
 
+    @Column(nullable = false)
+    private String kakaoId;
+
     private String profile_url;
 
     private String category; // 이게 왜 필요했었죠?

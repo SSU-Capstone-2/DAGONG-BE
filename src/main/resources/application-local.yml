@@ -19,3 +19,16 @@ spring:
         hbm2ddl:
           auto: update  #create, update
         default_batch_fetch_size: 1000
+
+# 2. Thymeleaf(또는 뷰 리졸버)용 설정
+  mvc:
+    view:
+      prefix: /templates/   # Thymeleaf 뷰 파일 위치 (classpath:/templates/)
+      suffix: .html         # 뷰 파일 확장자
+
+# --------------------------------------------------
+# 3. 카카오 OAuth 설정
+# --------------------------------------------------
+kakao:
+  client: ${KAKAO_REST_API_KEY}       # 필수: 카카오 개발자 콘솔에서 발급받은 REST API 키
+  redirect: ${KAKAO_REDIRECT_URL}
