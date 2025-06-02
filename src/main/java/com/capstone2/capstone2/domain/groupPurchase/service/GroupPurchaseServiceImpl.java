@@ -87,4 +87,13 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
         groupPurchase.updateGroupPurchase(request);
         return groupPurchase;
     }
+
+    @Override
+    @Transactional
+    public void deleteGroupPurchase(Long groupPurchaseId) {
+        GroupPurchase groupPurchase = groupPurchaseRepository.findById(groupPurchaseId)
+                .orElseThrow(() -> new GroupPurchaseHandler(ErrorStatus.GROUP_PURCHASE_ID_NULL));
+
+        groupPurchaseRepository.delete(groupPurchase);
+    }
 }
