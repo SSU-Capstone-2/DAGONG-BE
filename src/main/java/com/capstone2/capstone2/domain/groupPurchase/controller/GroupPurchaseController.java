@@ -69,4 +69,15 @@ public class GroupPurchaseController {
         GroupPurchaseResponse.GroupPurchaseIdDTO response = GroupPurchaseConverter.toGroupPurchaseIdDTO(groupPurchase);
         return ApiResponse.onSuccess(SuccessStatus.GROUP_PURCHASE_UPDATE_OK, response);
     }
+
+    // 공구 삭제 API
+    @Operation(summary = "공동구매 삭제", description = "공동구매를 삭제하는 API 입니다.")
+    @Parameter(name = "groupPurchaseId", description = "삭제할 공동구매의 ID입니다.")
+    @DeleteMapping("/{groupPurchaseId}")
+    public ApiResponse<String> deleteGroupPurchase(
+        @PathVariable("groupPurchaseId") Long groupPurchaseId
+    ){
+        groupPurchaseService.deleteGroupPurchase(groupPurchaseId);
+        return ApiResponse.onSuccess(SuccessStatus.GROUP_PURCHASE_DELETE_OK, groupPurchaseId + "번 공동구매 삭제 성공");
+    }
 }

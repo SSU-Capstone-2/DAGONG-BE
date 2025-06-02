@@ -12,7 +12,7 @@ public class GroupPurchaseResponse {
     @Data
     @Builder
     public static class GroupPurchaseIdDTO {
-        Long groupPurchaseId;
+        private Long groupPurchaseId;
     }
 
     @Data
