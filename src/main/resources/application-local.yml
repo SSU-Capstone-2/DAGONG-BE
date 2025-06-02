@@ -11,7 +11,7 @@ spring:
       mode: never
   jpa:
     hibernate:
-      ddl-auto: create # create, update
+      ddl-auto: update # create, update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect

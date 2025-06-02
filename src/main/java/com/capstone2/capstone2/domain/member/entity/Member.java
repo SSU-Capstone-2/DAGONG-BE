@@ -35,9 +35,11 @@ public class Member extends BaseEntity {
 
     private String category; // 이게 왜 필요했었죠?
 
+    @Builder.Default
     @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GroupPurchase> groupPurchases = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Participation> participations = new ArrayList<>();
 }

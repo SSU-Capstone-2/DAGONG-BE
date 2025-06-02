@@ -11,8 +11,7 @@ public class NaverSearchConverter {
         return input == null ? null : input.replaceAll("<[^>]*>", "");
     }
 
-    // NaverSearchConverter.toSimpleResponseDTO(response, page, size)
-    public static NaverSearchResponse.SimpleResponseDTO toSimpleResponseDTO(NaverSearchResponse.FullResponseDTO response, int page, int size) {
+    public static NaverSearchResponse.SimpleResponseDTO toSimpleResponseDTO(NaverSearchResponse.FullResponseDTO response) {
         List<NaverSearchResponse.ItemDTO> items = response.getItems().stream()
                 .map(item -> NaverSearchResponse.ItemDTO.builder()
                         .title(removeHtmlTags(item.getTitle()))
@@ -27,8 +26,8 @@ public class NaverSearchConverter {
 
         return NaverSearchResponse.SimpleResponseDTO.builder()
                 .totalCount(response.getTotal())
-                .page(page)
-                .pageSize(size)
+                .page(response.getStart())
+                .pageSize(response.getDisplay())
                 .items(items)
                 .build();
     }
