@@ -5,9 +5,11 @@ import com.capstone2.capstone2.domain.groupPurchase.dto.GroupPurchaseRequest;
 import com.capstone2.capstone2.domain.groupPurchase.dto.GroupPurchaseResponse;
 import com.capstone2.capstone2.domain.groupPurchase.entity.GroupPurchase;
 import com.capstone2.capstone2.domain.groupPurchase.entity.GroupPurchaseImage;
+import com.capstone2.capstone2.domain.groupPurchase.entity.Participation;
 import com.capstone2.capstone2.domain.groupPurchase.handler.GroupPurchaseHandler;
 import com.capstone2.capstone2.domain.groupPurchase.repository.GroupPurchaseImageRepository;
 import com.capstone2.capstone2.domain.groupPurchase.repository.GroupPurchaseRepository;
+import com.capstone2.capstone2.domain.groupPurchase.repository.ParticipationRepository;
 import com.capstone2.capstone2.domain.member.entity.Member;
 import com.capstone2.capstone2.domain.member.handler.MemberHandler;
 import com.capstone2.capstone2.domain.member.repository.MemberRepository;
@@ -31,6 +33,7 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
     private final MemberRepository memberRepository;
     private final GroupPurchaseRepository groupPurchaseRepository;
     private final GroupPurchaseImageRepository groupPurchaseImageRepository;
+    private final ParticipationRepository participationRepository;
 
     // 공구 생성
     @Transactional
@@ -40,12 +43,22 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_ID_NULL));
 
+        // 1. 공구 생성
         GroupPurchase groupPurchase = groupPurchaseRepository.save(
                 GroupPurchaseConverter.toGroupPurchase(member, request)
         );
 
+        // 2. 이미지 저장
         GroupPurchaseImage image = GroupPurchaseConverter.toGroupPurchaseImage(groupPurchase, request.getImageUrl());
         groupPurchaseImageRepository.save(image);
+
+        // 3. 작성자 본인을 참여자로 추가
+        Participation participation = Participation.builder()
+                .member(member)
+                .groupPurchase(groupPurchase)
+                .build();
+        participationRepository.save(participation);
+        groupPurchase.addParticipation(participation); // 리스트 추가 + 참여자 수 증가
 
         return groupPurchase;
     }

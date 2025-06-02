@@ -6,6 +6,8 @@ import com.capstone2.capstone2.domain.model.enums.Status;
 import com.capstone2.capstone2.domain.model.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+
+import javax.swing.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +74,10 @@ public class GroupPurchase extends BaseEntity {
     @OneToMany(mappedBy = "groupPurchase", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GroupPurchaseImage> groupPurchaseImages = new ArrayList<>();
 
+    @Builder.Default
+    @OneToMany(mappedBy = "groupPurchase", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Participation> participations = new ArrayList<>();
+
     // 공동 구매 정보 수정
     public void updateGroupPurchase(GroupPurchaseRequest.GroupPurchaseUpdateDTO request) {
         this.title = request.getTitle();
@@ -95,5 +101,10 @@ public class GroupPurchase extends BaseEntity {
 
     public void increaseViews() {
         this.views += 1;
+    }
+
+    public void addParticipation(Participation participation) {
+        this.participations.add(participation);
+        this.participants += 1;
     }
 }
