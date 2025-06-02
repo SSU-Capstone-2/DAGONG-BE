@@ -10,6 +10,11 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class GroupPurchaseImage extends BaseEntity {
+
+    public GroupPurchaseImage(GroupPurchase groupPurchase, String imageUrl) {
+        this.groupPurchase = groupPurchase;
+        this.imageUrl = imageUrl;
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

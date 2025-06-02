@@ -1,5 +1,6 @@
 package com.capstone2.capstone2.domain.groupPurchase.entity;
 
+import com.capstone2.capstone2.domain.groupPurchase.dto.GroupPurchaseRequest;
 import com.capstone2.capstone2.domain.member.entity.Member;
 import com.capstone2.capstone2.domain.model.enums.Status;
 import com.capstone2.capstone2.domain.model.entity.BaseEntity;
@@ -70,4 +71,25 @@ public class GroupPurchase extends BaseEntity {
     @Builder.Default
     @OneToMany(mappedBy = "groupPurchase", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GroupPurchaseImage> groupPurchaseImages = new ArrayList<>();
+
+    // 공동 구매 정보 수정
+    public void updateGroupPurchase(GroupPurchaseRequest.GroupPurchaseUpdateDTO request) {
+        this.title = request.getTitle();
+        this.content = request.getContent();
+        this.place = request.getPlace();
+        this.name = request.getName();
+        this.quantity = request.getQuantity();
+        this.participants = request.getParticipants();
+        this.category1 = request.getCategory1();
+        this.category2 = request.getCategory2();
+        this.deadline = request.getDeadline();
+
+        this.groupPurchaseImages.clear();
+        if (request.getImageUrls() != null) {
+            for (String imageUrl: request.getImageUrls()) {
+                GroupPurchaseImage image = new GroupPurchaseImage(this, imageUrl);
+                this.groupPurchaseImages.add(image);
+            }
+        }
+    }
 }
