@@ -89,7 +89,23 @@ public class GroupPurchaseController {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-       Page<GroupPurchaseResponse.GroupPurchaseListDTO> response = groupPurchaseService.getPopularGroupPurchases(sort, page, size);
+       Page<GroupPurchaseResponse.GroupPurchaseListDTO> response =
+               groupPurchaseService.getPopularGroupPurchases(sort, page, size);
        return ApiResponse.onSuccess(SuccessStatus.GROUP_PURCHASE_FETCH_RANKING_OK, response);
     }
+
+    // 특정 카테고리의 공구 목록 조회
+    @GetMapping("/category")
+    @Operation(summary = "카테고리별 공구 목록 조회", description = "대분류(category1), 소분류(cateogry2)를 기준으로 공구 목록을 조회하는 API입니다. 페이지는 1부터 시작합니다.")
+    public ApiResponse<Page<GroupPurchaseResponse.GroupPurchaseListDTO>> getGroupPurchaseByCategory(
+            @RequestParam String category1,
+            @RequestParam(required = false) String category2,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Page<GroupPurchaseResponse.GroupPurchaseListDTO> response =
+                groupPurchaseService.getGroupPurchasesByCategory(category1, category2, page, size);
+        return ApiResponse.onSuccess(SuccessStatus.GROUP_PURCHASE_FETCH_BY_CATEGORY, response);
+    }
+
 }
