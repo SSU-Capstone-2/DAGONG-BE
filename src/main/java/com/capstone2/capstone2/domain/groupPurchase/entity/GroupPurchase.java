@@ -92,4 +92,8 @@ public class GroupPurchase extends BaseEntity {
             }
         }
     }
+
+    public void increaseViews() {
+        this.views += 1;
+    }
 }

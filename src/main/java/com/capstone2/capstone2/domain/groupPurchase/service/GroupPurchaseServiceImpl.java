@@ -61,9 +61,12 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
 
     // 공구 상세 조회
     @Override
+    @Transactional
     public GroupPurchaseResponse.GroupPurchaseDetailDTO getGroupPurchaseDetail(Long purchaseId) {
         GroupPurchase groupPurchase = groupPurchaseRepository.findById(purchaseId)
                 .orElseThrow(() -> new GroupPurchaseHandler(ErrorStatus.GROUP_PURCHASE_ID_NULL));
+
+        groupPurchase.increaseViews(); // 조회 시 조회수 1 증가
 
         String writerName = groupPurchase.getWriter().getNickname();
         List<String> imageUrls = groupPurchase.getGroupPurchaseImages().stream()
