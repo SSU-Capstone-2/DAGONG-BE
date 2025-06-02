@@ -66,5 +66,7 @@ jobs:
               -e DEPLOY_DB_URL="${{ secrets.DEPLOY_DB_URL }}" \
               -e DEPLOY_DB_USERNAME="${{ secrets.DEPLOY_DB_USERNAME }}" \
               -e DEPLOY_DB_PASSWORD="${{ secrets.DEPLOY_DB_PASSWORD }}" \
+              -e NAVER_SEARCH_CLIENT_ID="${{ secrets.NAVER_SEARCH_CLIENT_ID }}" \
+              -e NAVER_SEARCH_CLIENT_SECRET="${{ secrets.NAVER_SEARCH_CLIENT_SECRET }}" \
               ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}
           

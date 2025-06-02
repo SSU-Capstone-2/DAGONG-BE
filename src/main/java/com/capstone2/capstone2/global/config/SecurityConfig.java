@@ -30,6 +30,8 @@ public class SecurityConfig {
             "/v3/api-docs/**",
             "/login",
             "/refresh",
+            "/search/**",
+            "/purchases/**",
             "/auth/login/kakao"
     };
 

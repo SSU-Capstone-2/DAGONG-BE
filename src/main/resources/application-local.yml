@@ -32,3 +32,8 @@ spring:
 kakao:
   client: ${KAKAO_REST_API_KEY}       # 필수: 카카오 개발자 콘솔에서 발급받은 REST API 키
   redirect: ${KAKAO_REDIRECT_URL}
+
+naver:
+  search:
+    client-id: ${NAVER_SEARCH_CLIENT_ID}
+    client-secret: ${NAVER_SEARCH_CLIENT_SECRET}
