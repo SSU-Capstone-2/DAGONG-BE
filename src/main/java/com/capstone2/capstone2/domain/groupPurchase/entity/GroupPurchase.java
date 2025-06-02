@@ -6,6 +6,8 @@ import com.capstone2.capstone2.domain.model.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "group_purchase")
@@ -64,4 +66,8 @@ public class GroupPurchase extends BaseEntity {
 
     // 마감 예측 시간
     private LocalDateTime deadline;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "groupPurchase", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GroupPurchaseImage> groupPurchaseImages = new ArrayList<>();
 }

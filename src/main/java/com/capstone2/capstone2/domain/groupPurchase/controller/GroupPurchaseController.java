@@ -45,4 +45,15 @@ public class GroupPurchaseController {
         Page<GroupPurchaseResponse.GroupPurchaseListDTO> response = groupPurchaseService.getAllPurchases(page, size);
         return ApiResponse.onSuccess(SuccessStatus.GROUP_PURCHASE_FETCH_ALL_OK, response);
     }
+
+    // 공구 상세 조회 API
+    @Operation(summary = "공동구매 상세 조회", description = "공동구매를 상세 조회하는 API입니다.")
+    @Parameter(name = "groupPurchaseId", description = "상세 조회할 공동구매의 ID입니다.")
+    @GetMapping("/{groupPurchaseId}")
+    public ApiResponse<GroupPurchaseResponse.GroupPurchaseDetailDTO> getGroupPurchaseDetail(
+            @PathVariable("groupPurchaseId") Long groupPurchaseId
+    ){
+        GroupPurchaseResponse.GroupPurchaseDetailDTO response = groupPurchaseService.getGroupPurchaseDetail(groupPurchaseId);
+        return ApiResponse.onSuccess(SuccessStatus.GROUP_PURCHASE_FETCH_DETAIL_OK, response);
+    }
 }

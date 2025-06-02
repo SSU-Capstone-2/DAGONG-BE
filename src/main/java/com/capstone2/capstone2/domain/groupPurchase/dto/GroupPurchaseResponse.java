@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class GroupPurchaseResponse {
 
@@ -26,5 +27,26 @@ public class GroupPurchaseResponse {
         private int views;
         private int likes;
         private LocalDateTime deadline;
+    }
+
+    @Data
+    @Builder
+    public static class GroupPurchaseDetailDTO {
+        private Long id;
+        private String title;
+        private String content;
+        private String place;
+        private Status status;
+        private String name;
+        private int quantity;
+        private List<String> imageUrls;
+        private int participants;
+        private String writerName;
+        private String category1;
+        private String category2;
+        private int views;
+        private int likes;
+        private LocalDateTime deadline;
+        private LocalDateTime createdAt;
     }
 }

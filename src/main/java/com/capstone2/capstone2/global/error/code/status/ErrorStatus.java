@@ -26,7 +26,11 @@ public enum ErrorStatus implements BaseErrorCode {
     // Member 관련
     MEMBER_ID_NULL(HttpStatus.BAD_REQUEST, "MEMBER_4001", "사용자 아이디는 필수 입니다."),
     MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER_4002", "사용자가 없습니다."),
+
+    GROUP_PURCHASE_ID_NULL(HttpStatus.BAD_REQUEST, "GROUP_PURCHASE_4001", "공동구매 아이디는 필수 입니다."),
+
     ;
+
 
     private final HttpStatus httpStatus;
     private final String code;

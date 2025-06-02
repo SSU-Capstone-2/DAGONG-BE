@@ -7,6 +7,8 @@ import com.capstone2.capstone2.domain.groupPurchase.entity.GroupPurchaseImage;
 import com.capstone2.capstone2.domain.member.entity.Member;
 import com.capstone2.capstone2.domain.model.enums.Status;
 
+import java.util.List;
+
 public class GroupPurchaseConverter {
     public static GroupPurchase toGroupPurchase(Member member, GroupPurchaseRequest.GroupPurchaseCreateDTO request) {
         return GroupPurchase.builder()
@@ -50,6 +52,27 @@ public class GroupPurchaseConverter {
                 .status(groupPurchase.getStatus())
                 .views(groupPurchase.getViews())
                 .likes(groupPurchase.getLikes())
+                .build();
+    }
+
+    public static GroupPurchaseResponse.GroupPurchaseDetailDTO toGroupPurchaseDetailDTO(GroupPurchase groupPurchase, String writerName, List<String> imageUrls) {
+        return GroupPurchaseResponse.GroupPurchaseDetailDTO.builder()
+                .id(groupPurchase.getId())
+                .title(groupPurchase.getTitle())
+                .content(groupPurchase.getContent())
+                .place(groupPurchase.getPlace())
+                .status(groupPurchase.getStatus())
+                .name(groupPurchase.getName())
+                .quantity(groupPurchase.getQuantity())
+                .imageUrls(imageUrls)
+                .participants(groupPurchase.getParticipants())
+                .writerName(writerName)
+                .category1(groupPurchase.getCategory1())
+                .category2(groupPurchase.getCategory2())
+                .views(groupPurchase.getViews())
+                .likes(groupPurchase.getLikes())
+                .deadline(groupPurchase.getDeadline())
+                .createdAt(groupPurchase.getCreatedAt())
                 .build();
     }
 }
