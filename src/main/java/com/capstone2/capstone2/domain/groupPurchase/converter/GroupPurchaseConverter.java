@@ -33,9 +33,23 @@ public class GroupPurchaseConverter {
     }
 
 
-    public static  GroupPurchaseResponse.GroupPurchaseIdDTO toGroupPurchaseIdDTO(GroupPurchase groupPurchase) {
+    public static GroupPurchaseResponse.GroupPurchaseIdDTO toGroupPurchaseIdDTO(GroupPurchase groupPurchase) {
         return GroupPurchaseResponse.GroupPurchaseIdDTO.builder()
                 .groupPurchaseId(groupPurchase.getId())
+                .build();
+    }
+
+    public static GroupPurchaseResponse.GroupPurchaseListDTO toGroupPurchaseListDTO(GroupPurchase groupPurchase) {
+        return GroupPurchaseResponse.GroupPurchaseListDTO.builder()
+                .id(groupPurchase.getId())
+                .title(groupPurchase.getTitle())
+                .price(groupPurchase.getPrice())
+                .place(groupPurchase.getPlace())
+                .participants(groupPurchase.getParticipants())
+                .deadline(groupPurchase.getDeadline())
+                .status(groupPurchase.getStatus())
+                .views(groupPurchase.getViews())
+                .likes(groupPurchase.getLikes())
                 .build();
     }
 }

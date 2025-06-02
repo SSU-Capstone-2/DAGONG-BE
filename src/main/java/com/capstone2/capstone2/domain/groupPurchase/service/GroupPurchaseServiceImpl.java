@@ -2,6 +2,7 @@ package com.capstone2.capstone2.domain.groupPurchase.service;
 
 import com.capstone2.capstone2.domain.groupPurchase.converter.GroupPurchaseConverter;
 import com.capstone2.capstone2.domain.groupPurchase.dto.GroupPurchaseRequest;
+import com.capstone2.capstone2.domain.groupPurchase.dto.GroupPurchaseResponse;
 import com.capstone2.capstone2.domain.groupPurchase.entity.GroupPurchase;
 import com.capstone2.capstone2.domain.groupPurchase.entity.GroupPurchaseImage;
 import com.capstone2.capstone2.domain.groupPurchase.repository.GroupPurchaseImageRepository;
@@ -10,7 +11,13 @@ import com.capstone2.capstone2.domain.member.entity.Member;
 import com.capstone2.capstone2.domain.member.handler.MemberHandler;
 import com.capstone2.capstone2.domain.member.repository.MemberRepository;
 import com.capstone2.capstone2.global.error.code.status.ErrorStatus;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.config.PageableHandlerMethodArgumentResolverCustomizer;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -22,7 +29,10 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
     private final MemberRepository memberRepository;
     private final GroupPurchaseRepository groupPurchaseRepository;
     private final GroupPurchaseImageRepository groupPurchaseImageRepository;
+    private final PageableHandlerMethodArgumentResolverCustomizer pageableCustomizer;
 
+    // 공구 생성
+    @Transactional
     @Override
     public GroupPurchase createGroupPurchase(Long memberId, GroupPurchaseRequest.GroupPurchaseCreateDTO request) {
 
@@ -37,5 +47,14 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
         groupPurchaseImageRepository.save(image);
 
         return groupPurchase;
+    }
+
+    // 공구 전체 조회
+    @Override
+    public Page<GroupPurchaseResponse.GroupPurchaseListDTO> getAllPurchases(int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Page<GroupPurchase> groupPurchases = groupPurchaseRepository.findAll(pageable);
+
+        return groupPurchases.map(GroupPurchaseConverter::toGroupPurchaseListDTO);
     }
 }

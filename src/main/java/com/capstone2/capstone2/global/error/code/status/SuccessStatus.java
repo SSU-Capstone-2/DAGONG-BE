@@ -18,7 +18,8 @@ public enum SuccessStatus implements BaseCode {
     NAVER_SEARCH_FETCH_OK(HttpStatus.OK, "NAVER_SEARCH2001", "네이버 검색 API 호출이 완료되었습니다."),
 
     // 공동 구매
-    GROUP_PURCHASE_CREATE_OK(HttpStatus.OK, "GROUP_PURCHASE2001", "공동 구매 생성이 완료되었습니다.")
+    GROUP_PURCHASE_CREATE_OK(HttpStatus.OK, "GROUP_PURCHASE2001", "공동 구매 생성이 완료되었습니다."),
+    GROUP_PURCHASE_FETCH_ALL_OK(HttpStatus.OK, "GROUP_PURCHASE2002", "공동 구매 전체 조회가 완료되었습니다.")
 
     ;
 

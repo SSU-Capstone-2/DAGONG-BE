@@ -35,6 +35,6 @@ public class NaverSearchServiceImpl implements NaverSearchService {
                 .retrieve()
                 .body(NaverSearchResponse.FullResponseDTO.class);
 
-        return NaverSearchConverter.toSimpleResponseDTO(response, page, size);
+        return NaverSearchConverter.toSimpleResponseDTO(response);
     }
 }
