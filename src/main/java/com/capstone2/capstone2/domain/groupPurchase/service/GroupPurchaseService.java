@@ -8,4 +8,5 @@ import org.springframework.data.domain.Page;
 public interface GroupPurchaseService {
     GroupPurchase createGroupPurchase(Long memberId, GroupPurchaseRequest.GroupPurchaseCreateDTO request);
     Page<GroupPurchaseResponse.GroupPurchaseListDTO> getAllPurchases(int page, int size);
+    GroupPurchaseResponse.GroupPurchaseDetailDTO getGroupPurchaseDetail(Long purchaseId);
 }

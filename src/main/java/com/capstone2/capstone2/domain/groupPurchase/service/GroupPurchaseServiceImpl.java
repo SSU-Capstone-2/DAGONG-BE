@@ -5,6 +5,7 @@ import com.capstone2.capstone2.domain.groupPurchase.dto.GroupPurchaseRequest;
 import com.capstone2.capstone2.domain.groupPurchase.dto.GroupPurchaseResponse;
 import com.capstone2.capstone2.domain.groupPurchase.entity.GroupPurchase;
 import com.capstone2.capstone2.domain.groupPurchase.entity.GroupPurchaseImage;
+import com.capstone2.capstone2.domain.groupPurchase.handler.GroupPurchaseHandler;
 import com.capstone2.capstone2.domain.groupPurchase.repository.GroupPurchaseImageRepository;
 import com.capstone2.capstone2.domain.groupPurchase.repository.GroupPurchaseRepository;
 import com.capstone2.capstone2.domain.member.entity.Member;
@@ -20,7 +21,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.config.PageableHandlerMethodArgumentResolverCustomizer;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +32,6 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
     private final MemberRepository memberRepository;
     private final GroupPurchaseRepository groupPurchaseRepository;
     private final GroupPurchaseImageRepository groupPurchaseImageRepository;
-    private final PageableHandlerMethodArgumentResolverCustomizer pageableCustomizer;
 
     // 공구 생성
     @Transactional
@@ -56,5 +58,20 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
         Page<GroupPurchase> groupPurchases = groupPurchaseRepository.findAll(pageable);
 
         return groupPurchases.map(GroupPurchaseConverter::toGroupPurchaseListDTO);
+    }
+
+    // 공구 상세 조회
+    @Override
+    public GroupPurchaseResponse.GroupPurchaseDetailDTO getGroupPurchaseDetail(Long purchaseId) {
+        GroupPurchase groupPurchase = groupPurchaseRepository.findById(purchaseId)
+                .orElseThrow(() -> new GroupPurchaseHandler(ErrorStatus.GROUP_PURCHASE_ID_NULL));
+
+        String writerName = groupPurchase.getWriter().getNickname();
+        List<String> imageUrls = groupPurchase.getGroupPurchaseImages().stream()
+                .map(GroupPurchaseImage::getImageUrl)
+                .collect(Collectors.toList());
+
+        GroupPurchaseResponse.GroupPurchaseDetailDTO response = GroupPurchaseConverter.toGroupPurchaseDetailDTO(groupPurchase, writerName, imageUrls);
+        return response;
     }
 }
