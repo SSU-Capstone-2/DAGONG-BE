@@ -11,4 +11,5 @@ public interface GroupPurchaseService {
     GroupPurchaseResponse.GroupPurchaseDetailDTO getGroupPurchaseDetail(Long purchaseId);
     GroupPurchase updateGroupPurchase(Long groupPurchaseId, GroupPurchaseRequest.GroupPurchaseUpdateDTO request);
     void deleteGroupPurchase(Long groupPurchaseId);
+    Page<GroupPurchaseResponse.GroupPurchaseListDTO> getPopularGroupPurchases(String sort, int page ,int size);
 }
