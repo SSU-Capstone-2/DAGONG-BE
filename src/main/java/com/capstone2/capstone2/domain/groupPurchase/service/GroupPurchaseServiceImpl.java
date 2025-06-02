@@ -44,7 +44,7 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
                 GroupPurchaseConverter.toGroupPurchase(member, request)
         );
 
-        GroupPurchaseImage image = GroupPurchaseConverter.toGroupPurchaseImage(groupPurchase, request.getImage());
+        GroupPurchaseImage image = GroupPurchaseConverter.toGroupPurchaseImage(groupPurchase, request.getImageUrl());
         groupPurchaseImageRepository.save(image);
 
         return groupPurchase;

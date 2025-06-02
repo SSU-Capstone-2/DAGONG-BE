@@ -1,6 +1,5 @@
 package com.capstone2.capstone2.domain.groupPurchase.dto;
 
-import com.capstone2.capstone2.domain.model.enums.Status;
 import lombok.Builder;
 import lombok.Data;
 
@@ -15,7 +14,7 @@ public class GroupPurchaseRequest {
         private String title;
         private String content;
         private String name;
-        private String image;
+        private String imageUrl;
         private String category1;
         private String category2;
         private int price;
