@@ -1,5 +1,6 @@
 package com.capstone2.capstone2.global.config;
 
+import com.capstone2.capstone2.global.oauth.handler.AuthHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final AuthHandler authHandler;
     private static final String[] SECURITY_ALLOW_ARRAY  = {
             "/api/login",
             "/health",
@@ -46,7 +48,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(SECURITY_ALLOW_ARRAY).permitAll()
                         .anyRequest().authenticated()
+
                 )
+                .exceptionHandling(e -> e.authenticationEntryPoint(authHandler))
 //                .csrf().disable() // CSRF 보호 비활성화 (API 서버의 경우)
 //                .formLogin().disable() // 폼 로그인 비활성화
 //                .httpBasic().disable() // HTTP Basic 인증 비활성화
