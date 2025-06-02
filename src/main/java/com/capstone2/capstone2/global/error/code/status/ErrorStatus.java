@@ -23,6 +23,9 @@ public enum ErrorStatus implements BaseErrorCode {
     AUTH_INVALID_CODE(HttpStatus.UNAUTHORIZED, "AUTH_008", "코드가 유효하지 않습니다."),
     LOGIN_REQUIRED(HttpStatus.UNAUTHORIZED, "AUTH_009", "로그인이 필요합니다."),
 
+    // Member 관련
+    MEMBER_ID_NULL(HttpStatus.BAD_REQUEST, "MEMBER_4001", "사용자 아이디는 필수 입니다."),
+    MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER_4002", "사용자가 없습니다."),
     ;
 
     private final HttpStatus httpStatus;

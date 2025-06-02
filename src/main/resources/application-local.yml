@@ -10,12 +10,17 @@ spring:
     init:
       mode: never
   jpa:
+    hibernate:
+      ddl-auto: create # create, update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
         show_sql: true
         format_sql: true
         use_sql_comments: true
-        hbm2ddl:
-          auto: update  #create, update
         default_batch_fetch_size: 1000
+
+naver:
+  search:
+    client-id: ${NAVER_SEARCH_CLIENT_ID}
+    client-secret: ${NAVER_SEARCH_CLIENT_SECRET}
