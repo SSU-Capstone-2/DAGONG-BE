@@ -10,5 +10,7 @@ public class MemberResponseDTO {
         private Long id;
         private String nickname;
         private String email;
+
+        private String token; // 테스트용
     }
 }
