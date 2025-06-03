@@ -4,6 +4,7 @@ import com.capstone2.capstone2.domain.member.entity.Member;
 import com.capstone2.capstone2.domain.member.repository.MemberRepository;
 import com.capstone2.capstone2.global.oauth.converter.AuthConverter;
 import com.capstone2.capstone2.global.oauth.dto.KakaoDTO;
+import com.capstone2.capstone2.global.oauth.dto.KakaoTokenResponseDTO;
 import com.capstone2.capstone2.global.util.JwtUtil;
 import com.capstone2.capstone2.global.util.KakaoUtil;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,23 +25,69 @@ public class AuthService {
     public Member oAuthLogin(String accessCode, HttpServletResponse httpServletResponse) {
         KakaoDTO.OAuthToken oAuthToken = kakaoUtil.requestToken(accessCode);
         KakaoDTO.KakaoProfile kakaoProfile = kakaoUtil.requestProfile(oAuthToken);
+
+        Long kakaoId = kakaoProfile.getId();
         String email = kakaoProfile.getKakao_account().getEmail();
+        String nickname = kakaoProfile.getKakao_account().getProfile().getNickname();
+        String profileImageUrl = kakaoProfile.getKakao_account().getProfile().getProfile_image_url();
+
 
         Member member = memberRepository.findByEmail(email)
-                .orElseGet(() -> createNewMember(kakaoProfile));
+                .orElseGet(() -> createNewMember(kakaoId, email, nickname, profileImageUrl));
 
         String token = jwtUtil.createAccessToken(member.getEmail());
         httpServletResponse.setHeader("Authorization", token);
 
         return member;
     }
+//
+//    private Member createNewMember(KakaoDTO.KakaoProfile kakaoProfile) {
+//        Member newMember = AuthConverter.toMember(
+//                kakaoProfile.getKakao_account().getEmail(),
+//                kakaoProfile.getKakao_account().getProfile().getNickname()
+//        );
+//        return memberRepository.save(newMember);
+//    }
 
-    private Member createNewMember(KakaoDTO.KakaoProfile kakaoProfile) {
-        Member newMember = AuthConverter.toMember(
-                kakaoProfile.getKakao_account().getEmail(),
-                kakaoProfile.getKakao_account().getProfile().getNickname()
-        );
+    private Member createNewMember(
+            Long kakaoId,
+            String email,
+            String nickname,
+            String profileImageUrl
+    ){
+        Member newMember = AuthConverter.toMember(kakaoId, email, nickname, profileImageUrl);
+
         return memberRepository.save(newMember);
+    }
+
+    @Transactional
+    public Member loginOrJoinWithKakaoData(
+            KakaoTokenResponseDTO.TokenAndProfile kakaoData,
+            HttpServletResponse httpServletResponse
+    ) {
+        String email = kakaoData.getEmail();
+        Long kakaoId = kakaoData.getKakaoId();
+        String nickname = kakaoData.getNickname();
+        String profileUrl = kakaoData.getProfileImageUrl();
+
+        // ① 이메일 또는 카카오 ID 기준으로 회원 조회
+        Member member = memberRepository.findByEmail(email)
+                .orElseGet(() -> {
+                    // ② DB에 없으면 새 회원으로 저장
+                    Member newMember = Member.builder()
+                            .kakaoId(kakaoId)
+                            .email(email)
+                            .nickname(nickname)
+                            .profile_url(profileUrl)
+                            .build();
+                    return memberRepository.save(newMember);
+                });
+
+        // ③ 자체 JWT 생성
+        String jwt = jwtUtil.createAccessToken(member.getEmail());
+        httpServletResponse.setHeader("Authorization", "Bearer " + jwt);
+
+        return member;
     }
 
 }

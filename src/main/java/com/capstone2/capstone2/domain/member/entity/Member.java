@@ -36,7 +36,7 @@ public class Member extends BaseEntity {
 
     private String profile_url;
 
-    private String category; // 이게 왜 필요했었죠?
+    private String category;
 
     @Builder.Default
     @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL, orphanRemoval = true)

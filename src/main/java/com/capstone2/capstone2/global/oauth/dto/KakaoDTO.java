@@ -45,6 +45,7 @@ public class KakaoDTO {
             public static class Profile {
                 private String nickname;
                 private Boolean is_default_nickname;
+                private String profile_image_url;
             }
         }
     }

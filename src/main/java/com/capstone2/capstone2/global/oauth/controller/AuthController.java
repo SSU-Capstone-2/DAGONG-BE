@@ -6,6 +6,7 @@ import com.capstone2.capstone2.domain.member.entity.Member;
 import com.capstone2.capstone2.domain.member.service.MemberService;
 import com.capstone2.capstone2.global.common.response.ApiResponse;
 import com.capstone2.capstone2.global.error.code.status.SuccessStatus;
+import com.capstone2.capstone2.global.oauth.dto.KakaoTokenResponseDTO;
 import com.capstone2.capstone2.global.oauth.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -30,4 +31,16 @@ public class AuthController {
         return ApiResponse.onSuccess(SuccessStatus.USER_EMAIL_LOGIN_OK, MemberConverter.toJoinResultDTO(member));
     }
 
+    @PostMapping("/kakao/login-join")
+    public ApiResponse<MemberResponseDTO.JoinResultDTO> loginOrJoin(
+            @RequestBody KakaoTokenResponseDTO.TokenAndProfile kakaoData,
+            HttpServletResponse httpServletResponse
+    ) {
+        // AuthService 쪽에서 “kakaoData”를 받아서 DB 조회/저장 → 자체 JWT 발급 → 응답 헤더에 JWT 담음
+        Member member = authService.loginOrJoinWithKakaoData(kakaoData, httpServletResponse);
+        return ApiResponse.onSuccess(
+                SuccessStatus.USER_EMAIL_LOGIN_OK,
+                MemberConverter.toJoinResultDTO(member)
+        );
+    }
 }
