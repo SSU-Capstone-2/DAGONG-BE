@@ -1,5 +1,6 @@
 package com.capstone2.capstone2.global.oauth.service;
 
+import com.capstone2.capstone2.domain.member.dto.MemberResponseDTO;
 import com.capstone2.capstone2.domain.member.entity.Member;
 import com.capstone2.capstone2.domain.member.repository.MemberRepository;
 import com.capstone2.capstone2.global.error.code.status.ErrorStatus;
@@ -12,6 +13,8 @@ import com.capstone2.capstone2.global.util.KakaoUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -61,6 +64,8 @@ public class AuthService {
 
         return memberRepository.save(newMember);
     }
+
+
     @Transactional
     public Member loginOrJoinWithKakaoData(
             KakaoTokenResponseDTO.TokenAndProfile kakaoData,
@@ -88,42 +93,34 @@ public class AuthService {
                 });
     }
 
+    public Member getLoginUser() {
+        // SecurityContextHolder에서 인증 정보를 꺼냄
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // 인증 정보가 없거나 익명 사용자라면 예외 처리
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new AuthException(ErrorStatus.AUTH_INVALID_CODE);
+            // ErrorStatus.AUTH_UNAUTHORIZED: 401용 에러 코드(enum)로 미리 정의해 두세요.
+        }
+
+        // Authentication.getName() 을 통해 토큰에서 추출된 사용자 식별자(예: 이메일) 얻기
+        String email = authentication.getName();
+
+        // DB에서 이메일로 회원 조회 → 없으면 예외
+        return memberRepository.findByEmail(email)
+                .orElseThrow(() -> new AuthException(ErrorStatus.AUTH_INVALID_CODE));
+        // ErrorStatus.USER_NOT_FOUND: “사용자를 찾을 수 없습니다” 용으로 미리 정의
+    }
+
+    // ② Member 엔티티 → CurrentUserDTO 변환 메서드
+    public MemberResponseDTO.JoinResultDTO toCurrentUserDto(Member member) {
+        return MemberResponseDTO.JoinResultDTO.builder()
+                .id(member.getId())
+                .email(member.getEmail())
+                .nickname(member.getNickname())
+                .build();
+    }
+
+
 
 }
-//@Transactional
-//public Member oAuthLogin(String accessCode, HttpServletResponse response) {
-//    System.out.println("🔥 AuthService: requestToken 호출 전");
-//    KakaoDTO.OAuthToken oAuthToken = kakaoUtil.requestToken(accessCode);
-//    System.out.println("🔥 AuthService: requestToken 반환됨, access_token=" + oAuthToken.getAccess_token());
-//
-//    // 2) AccessToken으로 프로필(사용자 정보) 요청 전에 로그
-//    System.out.println("🔥 AuthService: requestProfile 호출 전");
-//    KakaoDTO.KakaoProfile kakaoProfile = kakaoUtil.requestProfile(oAuthToken);
-//    System.out.println("🔥 AuthService: requestProfile 반환됨, kakaoId=" + kakaoProfile.getId());
-//
-//    // 3) 프로필에서 카카오 고유 ID와 이메일 가져오기
-//    Long kakaoId = kakaoProfile.getId();
-//    String email = kakaoProfile.getKakao_account().getEmail();
-//    String nickname = kakaoProfile.getProperties().getNickname();
-//
-//    // 4) DB에서 Member 조회 → 없으면 새로 생성
-//    Member member = memberRepository.findByKakaoId(kakaoId)
-//            .orElseGet(() -> {
-//                // 이메일이 null이면 예외 처리하거나, 임시 이메일로 채울 수도 있습니다.
-//                if (email == null) {
-//                    throw new AuthException(ErrorStatus.AUTH_INVALID_CODE);
-//                }
-//                Member newMember = Member.builder()
-//                        .kakaoId(kakaoId)
-//                        .email(email)
-//                        .nickname(nickname)
-//                        .build();
-//                return memberRepository.save(newMember);
-//            });
-//
-//    // 5) JWT AccessToken 생성 후 응답 헤더에 담기 (예시: 토큰 만료 시간, 리프레시 로직 등은 생략)
-//    String jwt = jwtUtil.createAccessToken(String.valueOf(member.getId()));
-//    response.setHeader("Authorization", "Bearer " + jwt);
-//
-//    return member;
-//}}
