@@ -29,6 +29,5 @@ public class KakaoTokenResponseDTO {
         private String nickname;
         private String profileImageUrl;
 
-        // 필요하다면 추가적으로 kakao_account 안의 다른 필드를 더 넣어도 됩니다.
     }
 }

@@ -69,10 +69,6 @@ public class SecurityConfig {
                         new JwtAuthenticationFilter(jwtUtil, memberRepository),
                         UsernamePasswordAuthenticationFilter.class
                 )
-
-//                .csrf().disable() // CSRF 보호 비활성화 (API 서버의 경우)
-//                .formLogin().disable() // 폼 로그인 비활성화
-//                .httpBasic().disable() // HTTP Basic 인증 비활성화
                 .build();
 
     }

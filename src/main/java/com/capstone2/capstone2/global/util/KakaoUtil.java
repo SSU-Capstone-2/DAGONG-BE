@@ -80,9 +80,9 @@ public class KakaoUtil {
                 String.class);
 
 
-        ObjectMapper objectMapper = new ObjectMapper();  // ✅ 선언 추가
+        ObjectMapper objectMapper = new ObjectMapper();  // 선언 추가
 
-        KakaoDTO.KakaoProfile kakaoProfile;  // ✅ 선언 추가
+        KakaoDTO.KakaoProfile kakaoProfile;  // 선언 추가
 
         try {
             kakaoProfile = objectMapper.readValue(response2.getBody(), KakaoDTO.KakaoProfile.class);

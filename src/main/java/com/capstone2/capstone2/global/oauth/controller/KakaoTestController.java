@@ -81,53 +81,5 @@ public class KakaoTestController {
         // 3) ApiResponse 형태로 감싸서 반환
         return ApiResponse.onSuccess(SuccessStatus.KAKAO_USER_FETCH_OK, dto);
     }
-
-//    private final MemberRepository memberRepository;
-//
-//    @Operation(
-//            summary = "현재 로그인된 사용자 정보 조회",
-//            security = @SecurityRequirement(name = "JWT TOKEN") // SwaggerConfig의 스키마 이름과 동일해야 합니다.
-//    )
-//    @GetMapping("/auth/user")
-//    public ApiResponse<MemberResponseDTO.JoinResultDTO> getCurrentUser(HttpServletRequest request) {
-////        String authorizationHeader = request.getHeader("Authorization");
-////        // 1) "Bearer {token}"에서 실제 토큰 부분만 떼어내기
-////        String token = null;
-////        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-////            token = authorizationHeader.substring(7);
-////        }
-////
-////        // 2) JWT 유효성 검사 (필요 시 예외 처리 로직 추가)
-////        if (token == null || !jwtUtil.validateToken(token)) {
-////            // 유효하지 않은 토큰
-////            // 여기서 ApiResponse.onFail(...)로 리턴하거나, 필요 시 401 예외를 던집니다.
-////            return null;
-////        }
-////
-////        // 3) 토큰에서 추출한 사용자 식별 정보(이메일)을 꺼냄
-////        String email = jwtUtil.getUserIdFromToken(token);
-//        // ※ 주의: getUserIdFromToken()이 현재 이메일을 sub(claim)으로 사용한다고 가정
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        // (JwtFilter 단계에서 이미 authentication이 세팅된 상태라고 가정)
-//
-//        // 2) Authentication.getPrincipal() 또는 getName()으로 사용자 식별자(여기서는 이메일)를 가져옴
-//        //    예시: JwtFilter에서 UsernamePasswordAuthenticationToken(email, authorities)를 set 했을 경우
-//        String email = authentication.getName(); // 또는 (String)authentication.getPrincipal();
-//
-//        // 3) 회원 정보 조회
-//        Member member = memberRepository.findByEmail(email)
-//                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
-//
-//        // 5) Member 엔티티를 CurrentUserDTO로 변환
-//        MemberResponseDTO.JoinResultDTO dto = MemberResponseDTO.JoinResultDTO.builder()
-//                .id(member.getId())
-//                .email(member.getEmail())
-//                .nickname(member.getNickname())
-//                .build();
-//
-//        // 6) ApiResponse 래핑하여 리턴
-//        return ApiResponse.onSuccess(SuccessStatus.KAKAO_USER_FETCH_OK, dto);
-//    }
-
 }
 

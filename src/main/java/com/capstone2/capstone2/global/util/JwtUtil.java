@@ -26,17 +26,17 @@ public class JwtUtil {
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
-    // ✅ 1. Access Token 생성
+    // 1. Access Token 생성
     public String createAccessToken(String userId) {
         return createToken(userId, ACCESS_TOKEN_VALIDITY);
     }
 
-    // ✅ 2. Refresh Token 생성
+    // 2. Refresh Token 생성
     public String createRefreshToken(String userId) {
         return createToken(userId, REFRESH_TOKEN_VALIDITY);
     }
 
-    // ✅ 3. JWT 생성 (공통 메서드)
+    // 3. JWT 생성 (공통 메서드)
     private String createToken(String userId, long expirationMillis) {
         return Jwts.builder()
                 .setSubject(userId)
@@ -46,7 +46,7 @@ public class JwtUtil {
                 .compact();
     }
 
-    // ✅ 4. JWT에서 userId 추출
+    // 4. JWT에서 userId 추출
     public String getUserIdFromToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
@@ -56,7 +56,7 @@ public class JwtUtil {
                 .getSubject();
     }
 
-    // ✅ 5. 토큰 유효성 검사
+    // 5. 토큰 유효성 검사
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()

@@ -45,14 +45,6 @@ public class AuthService {
 
         return member;
     }
-//
-//    private Member createNewMember(KakaoDTO.KakaoProfile kakaoProfile) {
-//        Member newMember = AuthConverter.toMember(
-//                kakaoProfile.getKakao_account().getEmail(),
-//                kakaoProfile.getKakao_account().getProfile().getNickname()
-//        );
-//        return memberRepository.save(newMember);
-//    }
 
     private Member createNewMember(
             Long kakaoId,
