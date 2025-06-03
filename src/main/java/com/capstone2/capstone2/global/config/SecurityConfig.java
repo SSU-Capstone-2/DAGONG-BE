@@ -37,8 +37,9 @@ public class SecurityConfig {
             "/auth/login/kakao",
             "/auth/login/kakao-test",
             "/auth/kakao/token",         // 카카오 인가 코드를 받아서 토큰&프로필 반환
-            "/auth/kakao/login-join"     // 카카오 토큰&프로필 받아서 가입/로그인(자체 JWT 발급)
-
+            "/auth/kakao/login-join",     // 카카오 토큰&프로필 받아서 가입/로그인(자체 JWT 발급)
+            "/auth/login/kakao-test",
+            "/kakao-success"
     };
 
     @Bean

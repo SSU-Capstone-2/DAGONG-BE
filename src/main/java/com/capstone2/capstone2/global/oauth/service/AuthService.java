@@ -2,9 +2,11 @@ package com.capstone2.capstone2.global.oauth.service;
 
 import com.capstone2.capstone2.domain.member.entity.Member;
 import com.capstone2.capstone2.domain.member.repository.MemberRepository;
+import com.capstone2.capstone2.global.error.code.status.ErrorStatus;
 import com.capstone2.capstone2.global.oauth.converter.AuthConverter;
 import com.capstone2.capstone2.global.oauth.dto.KakaoDTO;
 import com.capstone2.capstone2.global.oauth.dto.KakaoTokenResponseDTO;
+import com.capstone2.capstone2.global.oauth.exception.AuthException;
 import com.capstone2.capstone2.global.util.JwtUtil;
 import com.capstone2.capstone2.global.util.KakaoUtil;
 import jakarta.servlet.http.HttpServletResponse;
@@ -58,6 +60,32 @@ public class AuthService {
         Member newMember = AuthConverter.toMember(kakaoId, email, nickname, profileImageUrl);
 
         return memberRepository.save(newMember);
+    }
+    @Transactional
+    public Member loginOrJoinWithKakaoData(
+            KakaoTokenResponseDTO.TokenAndProfile kakaoData,
+            HttpServletResponse response
+    ) {
+        String email = kakaoData.getEmail();
+        Long kakaoId = kakaoData.getKakaoId();
+        String nickname = kakaoData.getNickname();
+        String profileUrl = kakaoData.getProfileImageUrl();
+
+        if (email == null) {
+            throw new AuthException(ErrorStatus.AUTH_INVALID_CODE);
+        }
+
+        // 이메일 기준으로 회원 조회 → 없으면 신규 생성
+        return memberRepository.findByEmail(email)
+                .orElseGet(() -> {
+                    Member newMember = Member.builder()
+                            .kakaoId(kakaoId)
+                            .email(email)
+                            .nickname(nickname)
+                            .profile_url(profileUrl)
+                            .build();
+                    return memberRepository.save(newMember);
+                });
     }
 
 
