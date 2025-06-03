@@ -19,7 +19,6 @@ public class AuthHandler implements AuthenticationEntryPoint {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json;charset=UTF-8");
 
-        // 여기에 ErrorStatus를 직접 사용하거나 하드코딩
         response.getWriter().write("{\"message\": \"인증이 필요합니다.\", \"status\": 401}");
     }
 }

@@ -7,6 +7,7 @@ import com.capstone2.capstone2.global.common.response.ApiResponse;
 import com.capstone2.capstone2.global.error.code.status.SuccessStatus;
 import com.capstone2.capstone2.global.oauth.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
+@Tag(name = "KAKAO API", description = "KAKAO API 입니다.")
 public class AuthController {
 
     private final AuthService authService;

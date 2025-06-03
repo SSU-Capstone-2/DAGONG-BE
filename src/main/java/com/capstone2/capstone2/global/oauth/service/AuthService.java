@@ -86,25 +86,19 @@ public class AuthService {
     }
 
     public Member getLoginUser() {
-        // SecurityContextHolder에서 인증 정보를 꺼냄
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         // 인증 정보가 없거나 익명 사용자라면 예외 처리
         if (authentication == null || !authentication.isAuthenticated()) {
-            throw new AuthException(ErrorStatus.AUTH_INVALID_CODE);
-            // ErrorStatus.AUTH_UNAUTHORIZED: 401용 에러 코드(enum)로 미리 정의해 두세요.
+            throw new AuthException(ErrorStatus.LOGIN_REQUIRED);
         }
 
-        // Authentication.getName() 을 통해 토큰에서 추출된 사용자 식별자(예: 이메일) 얻기
         String email = authentication.getName();
 
-        // DB에서 이메일로 회원 조회 → 없으면 예외
         return memberRepository.findByEmail(email)
-                .orElseThrow(() -> new AuthException(ErrorStatus.AUTH_INVALID_CODE));
-        // ErrorStatus.USER_NOT_FOUND: “사용자를 찾을 수 없습니다” 용으로 미리 정의
+                .orElseThrow(() -> new AuthException(ErrorStatus.MEMBER_NOT_FOUND));
     }
 
-    // ② Member 엔티티 → CurrentUserDTO 변환 메서드
     public MemberResponseDTO.JoinResultDTO toCurrentUserDto(Member member) {
         return MemberResponseDTO.JoinResultDTO.builder()
                 .id(member.getId())
@@ -112,7 +106,4 @@ public class AuthService {
                 .nickname(member.getNickname())
                 .build();
     }
-
-
-
 }

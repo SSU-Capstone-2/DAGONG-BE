@@ -29,10 +29,8 @@ public class KakaoTokenService {
         String nickname = kakaoData.getNickname();
         String profileUrl = kakaoData.getProfileImageUrl();
 
-        // ① 이메일 또는 카카오 ID 기준으로 회원 조회
         Member member = memberRepository.findByEmail(email)
                 .orElseGet(() -> {
-                    // ② DB에 없으면 새 회원으로 저장
                     Member newMember = Member.builder()
                             .kakaoId(kakaoId)
                             .email(email)
@@ -42,7 +40,6 @@ public class KakaoTokenService {
                     return memberRepository.save(newMember);
                 });
 
-        // ③ 자체 JWT 생성
         String jwt = jwtUtil.createAccessToken(member.getEmail());
         httpServletResponse.setHeader("Authorization", "Bearer " + jwt);
 
