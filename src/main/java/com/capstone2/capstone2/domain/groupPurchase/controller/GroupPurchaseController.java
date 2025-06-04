@@ -35,7 +35,7 @@ public class GroupPurchaseController {
     }
 
     // 공구 전체 목록 조회 API
-    @Operation(summary = "공동구매 전체 목록 조회", description = "공동구매 전체 목록을 조회하는 API입니다. 페이징이 적용되어있고 페이지는 1부터 시작합니다.")
+    @Operation(summary = "공동구매 전체 목록 조회", description = "공동구매 전체 목록을 조회하는 API입니다. 페이지는 1부터 시작합니다.")
     @GetMapping
     public ApiResponse<Page<GroupPurchaseResponse.GroupPurchaseListDTO>> getAllGroupPurchases(
         @RequestParam(defaultValue = "1") int page,
@@ -80,4 +80,32 @@ public class GroupPurchaseController {
         groupPurchaseService.deleteGroupPurchase(groupPurchaseId);
         return ApiResponse.onSuccess(SuccessStatus.GROUP_PURCHASE_DELETE_OK, groupPurchaseId + "번 공동구매 삭제 성공");
     }
+
+    // 인기 공구 목록 조회 API
+    @GetMapping("/ranking")
+    @Operation(summary = "인기 공구 목록 조회", description = "조회수 또는 찜 수 기준으로 전체 공구 목록을 반환합니다. Parameter로 views를 주면 조회수, likes를 주면 찜 수를 기반으로 정렬합니다. 페이지는 1부터 시작합니다.")
+    public ApiResponse<Page<GroupPurchaseResponse.GroupPurchaseListDTO>> getPopularGroupPurchases(
+            @RequestParam(defaultValue = "views") String sort,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+       Page<GroupPurchaseResponse.GroupPurchaseListDTO> response =
+               groupPurchaseService.getPopularGroupPurchases(sort, page, size);
+       return ApiResponse.onSuccess(SuccessStatus.GROUP_PURCHASE_FETCH_RANKING_OK, response);
+    }
+
+    // 특정 카테고리의 공구 목록 조회
+    @GetMapping("/category")
+    @Operation(summary = "카테고리별 공구 목록 조회", description = "대분류(category1), 소분류(cateogry2)를 기준으로 공구 목록을 조회하는 API입니다. 페이지는 1부터 시작합니다.")
+    public ApiResponse<Page<GroupPurchaseResponse.GroupPurchaseListDTO>> getGroupPurchaseByCategory(
+            @RequestParam String category1,
+            @RequestParam(required = false) String category2,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Page<GroupPurchaseResponse.GroupPurchaseListDTO> response =
+                groupPurchaseService.getGroupPurchasesByCategory(category1, category2, page, size);
+        return ApiResponse.onSuccess(SuccessStatus.GROUP_PURCHASE_FETCH_BY_CATEGORY, response);
+    }
+
 }

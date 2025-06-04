@@ -88,6 +88,7 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
         return groupPurchase;
     }
 
+    // 공구 삭제
     @Override
     @Transactional
     public void deleteGroupPurchase(Long groupPurchaseId) {
@@ -95,5 +96,38 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
                 .orElseThrow(() -> new GroupPurchaseHandler(ErrorStatus.GROUP_PURCHASE_ID_NULL));
 
         groupPurchaseRepository.delete(groupPurchase);
+    }
+
+    // 인기 공구 목록 조회
+    @Override
+    public Page<GroupPurchaseResponse.GroupPurchaseListDTO> getPopularGroupPurchases(String sort, int page, int size) {
+        Sort sorting;
+        if (sort.equalsIgnoreCase("likes")) {
+            sorting = Sort.by(Sort.Order.desc("likes"), Sort.Order.desc("views"));
+        } else {
+            sorting = Sort.by(Sort.Order.desc("views"), Sort.Order.desc("likes"));
+        }
+
+        Pageable pageable = PageRequest.of(page -1 , size, sorting);
+        Page<GroupPurchase> groupPurchases = groupPurchaseRepository.findAll(pageable);
+
+        return groupPurchases.map(GroupPurchaseConverter::toGroupPurchaseListDTO);
+    }
+
+
+    // 카테고리 별 공구 목록 조회
+    @Override
+    public Page<GroupPurchaseResponse.GroupPurchaseListDTO> getGroupPurchasesByCategory(String category1, String category2, int page, int size) {
+        Pageable pageable = PageRequest.of(page -1 , size, Sort.by(Sort.Direction.DESC, "createdAt"));
+
+        Page<GroupPurchase> groupPurchases;
+
+        if (category2 != null && !category2.isBlank()) {
+            groupPurchases = groupPurchaseRepository.findByCategory1AndCategory2(category1, category2, pageable);
+        } else {
+            groupPurchases = groupPurchaseRepository.findByCategory1(category1, pageable);
+        }
+
+        return groupPurchases.map(GroupPurchaseConverter::toGroupPurchaseListDTO);
     }
 }
