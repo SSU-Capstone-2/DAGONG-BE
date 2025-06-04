@@ -3,6 +3,7 @@ package com.capstone2.capstone2.global.exception;
 import com.capstone2.capstone2.global.common.response.ApiResponse;
 import com.capstone2.capstone2.global.error.code.status.ErrorReasonDTO;
 import com.capstone2.capstone2.global.error.code.status.ErrorStatus;
+import com.capstone2.capstone2.global.oauth.exception.AuthException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -65,6 +66,19 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(generalException,errorReasonHttpStatus,null,request);
     }
 
+    //kakao
+    @ExceptionHandler(AuthException.class)
+    public ResponseEntity<ApiResponse<?>> handleAuthException(AuthException ex) {
+        ErrorStatus status = ex.getErrorStatus();
+        return ResponseEntity
+                .status(status.getHttpStatus())
+                .body(ApiResponse.onFailure(
+                        status.getCode(),     // String 또는 int
+                        status.getMessage(),
+                        null                  // data는 보통 null 처리
+                ));
+    }
+
     private ResponseEntity<Object> handleExceptionInternal(Exception e, ErrorReasonDTO reason,
                                                            HttpHeaders headers, HttpServletRequest request) {
 
@@ -116,5 +130,6 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
                 request
         );
     }
+
 
 }

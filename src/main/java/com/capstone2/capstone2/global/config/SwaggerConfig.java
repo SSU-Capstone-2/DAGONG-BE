@@ -19,7 +19,9 @@ public class SwaggerConfig {
                 .version("1.0.0");
 
         String jwtSchemeName = "JWT TOKEN";
+
         SecurityRequirement securityRequirement = new SecurityRequirement().addList(jwtSchemeName);
+
         Components components = new Components()
                 .addSecuritySchemes("JWT TOKEN", new SecurityScheme()
                         .name("Authorization")

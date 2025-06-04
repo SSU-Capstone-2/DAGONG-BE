@@ -16,3 +16,10 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
         default_batch_fetch_size: 1000
+
+kakao:
+  client: ${KAKAO_REST_API_KEY}
+  redirect: ${KAKAO_REDIRECT_URL}
+
+jwt:
+  secret: ${JWT_SECRET}
