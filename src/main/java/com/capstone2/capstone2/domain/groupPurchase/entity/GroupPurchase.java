@@ -123,4 +123,16 @@ public class GroupPurchase extends BaseEntity {
             this.status = Status.COMPLETE;
         }
     }
+
+    public void decreaseParticipants() {
+        if (this.currentParticipants > 0) {
+            this.currentParticipants--;
+        }
+    }
+
+    public void activeIfWasProceeding() {
+        if (this.status == Status.COMPLETE) {
+            this.status = Status.ACTIVE;
+        }
+    }
 }

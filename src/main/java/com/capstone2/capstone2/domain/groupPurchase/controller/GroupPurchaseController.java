@@ -110,18 +110,34 @@ public class GroupPurchaseController {
     }
 
     // 공구 참여 API
-    @Operation(summary = "공동 구매 참여", description = "공동 구매에 사용자가 참여하는 API 입니다.")
+    @Operation(summary = "공동 구매 참여", description = "특정 공동 구매에 사용자가 참여하는 API 입니다.")
     @Parameters({
             @Parameter(name = "groupPurchaseId", description = "사용자가 참여하고자 하는 공구의 ID 입니다", required = true),
-            @Parameter(name = "memberId", description = "공동 구매 참여자의 ID입니다. 추후 hidden을 수정 예정입니다.", required = true)
+            @Parameter(name = "memberId", description = "공동 구매 참여자의 ID입니다. 추후 hidden으로 수정 예정입니다.", required = true)
     })
-    @PostMapping("/{groupPurchaseId}/participate/{memberId}")
+    @PostMapping("/participate/{groupPurchaseId}/{memberId}")
     public ApiResponse<GroupPurchaseResponse.GroupPurchaseIdDTO> participateGroupPurchase(
-            @PathVariable("groupPurchaseId") Long purchaseId,
+            @PathVariable("groupPurchaseId") Long groupPurchaseId,
             @PathVariable("memberId") Long memberId
     ){
-        GroupPurchase groupPurchase = groupPurchaseService.participateGroupPurchase(purchaseId, memberId);
+        GroupPurchase groupPurchase = groupPurchaseService.participateGroupPurchase(groupPurchaseId, memberId);
         GroupPurchaseResponse.GroupPurchaseIdDTO response = GroupPurchaseConverter.toGroupPurchaseIdDTO(groupPurchase);
         return ApiResponse.onSuccess(SuccessStatus.GROUP_PURCHASE_PARTICIPATE_OK, response);
+    }
+
+    // 공구 참여 취소 API
+    @Operation(summary = "공동 구매 참여 취소", description = "특정 공동 구매에 대한 사용자의 참여를 취소하는 API 입니다.")
+    @Parameters({
+            @Parameter(name = "groupPurchaseId", description = "사용자가 참여를 취소하고자 하는 공구의 ID 입니다.", required = true),
+            @Parameter(name = "memberId", description = "공동 구매 참여를 취소하고자 하는 사용자의 ID 입니다. 추후 hidden으로 수정 예정입니다.")
+    })
+    @DeleteMapping("/participate/{groupPurchaseId}/{memberId}")
+    public ApiResponse<GroupPurchaseResponse.GroupPurchaseIdDTO> cancelGroupPurchaseParticipation(
+            @PathVariable("groupPurchaseId") Long groupPurchaseId,
+            @PathVariable("memberId") Long memberId
+    ){
+        GroupPurchase groupPurchase = groupPurchaseService.cancelGroupPurchaseParticipate(groupPurchaseId, memberId);
+        GroupPurchaseResponse.GroupPurchaseIdDTO response = GroupPurchaseConverter.toGroupPurchaseIdDTO(groupPurchase);
+        return ApiResponse.onSuccess(SuccessStatus.GROUP_PURCHASE_PARTICIPATE_CANCEL_OK, response);
     }
 }

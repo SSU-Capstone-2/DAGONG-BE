@@ -7,6 +7,7 @@ import com.capstone2.capstone2.domain.groupPurchase.entity.GroupPurchase;
 import com.capstone2.capstone2.domain.groupPurchase.entity.GroupPurchaseImage;
 import com.capstone2.capstone2.domain.groupPurchase.entity.Participation;
 import com.capstone2.capstone2.domain.groupPurchase.handler.GroupPurchaseHandler;
+import com.capstone2.capstone2.domain.groupPurchase.handler.ParticipationHandler;
 import com.capstone2.capstone2.domain.groupPurchase.repository.GroupPurchaseImageRepository;
 import com.capstone2.capstone2.domain.groupPurchase.repository.GroupPurchaseRepository;
 import com.capstone2.capstone2.domain.groupPurchase.repository.ParticipationRepository;
@@ -167,6 +168,31 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
 
         participationRepository.save(participation);
         groupPurchase.addParticipation(participation);
+
+        return groupPurchase;
+    }
+
+    // 공구 참여 취소
+    @Transactional
+    @Override
+    public GroupPurchase cancelGroupPurchaseParticipate(Long groupPurchaseId, Long memberId) {
+        GroupPurchase groupPurchase = groupPurchaseRepository.findById(groupPurchaseId)
+                .orElseThrow(() -> new GroupPurchaseHandler(ErrorStatus.GROUP_PURCHASE_ID_NULL));
+
+        Participation participation = participationRepository.findByGroupPurchaseIdAndMemberId(groupPurchaseId, memberId)
+                .orElseThrow(() -> new ParticipationHandler(ErrorStatus.PARTICIPATION_NOT_IN));
+
+        // 연결 끊기
+        groupPurchase.getParticipations().remove(participation);
+
+        // 참여 삭제
+        participationRepository.delete(participation);
+
+        // 참여자 수 감소
+        groupPurchase.decreaseParticipants();
+
+        // Status 롤백
+        groupPurchase.activeIfWasProceeding();
 
         return groupPurchase;
     }
