@@ -144,6 +144,7 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
         return groupPurchases.map(GroupPurchaseConverter::toGroupPurchaseListDTO);
     }
 
+    // 공구 참여
     @Override
     @Transactional
     public GroupPurchase participateGroupPurchase(Long groupPurchaseId, Long memberId) {
@@ -164,8 +165,8 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
                 .groupPurchase(groupPurchase)
                 .build();
 
-        groupPurchase.addParticipation(participation);
         participationRepository.save(participation);
+        groupPurchase.addParticipation(participation);
 
         return groupPurchase;
     }

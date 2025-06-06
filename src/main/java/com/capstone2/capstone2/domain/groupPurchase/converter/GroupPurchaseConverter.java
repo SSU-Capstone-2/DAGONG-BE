@@ -24,7 +24,7 @@ public class GroupPurchaseConverter {
                 .views(0)
                 .likes(0)
                 .writer(member)
-                .status(Status.PROCEEDING)
+                .status(Status.ACTIVE)
                 .build();
     }
 
