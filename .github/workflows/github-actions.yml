@@ -68,5 +68,8 @@ jobs:
               -e DEPLOY_DB_PASSWORD="${{ secrets.DEPLOY_DB_PASSWORD }}" \
               -e NAVER_SEARCH_CLIENT_ID="${{ secrets.NAVER_SEARCH_CLIENT_ID }}" \
               -e NAVER_SEARCH_CLIENT_SECRET="${{ secrets.NAVER_SEARCH_CLIENT_SECRET }}" \
+              -e KAKAO_REST_API_KEY="${{ secrets.KAKAO_REST_API_KEY }}" \
+              -e KAKAO_REDIRECT_URL="${{ secrets.KAKAO_REDIRECT_URL }}" \
+              -e JWT_SECRET="${{ secrets.JWT_SECRET }}"\
               ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}
           
