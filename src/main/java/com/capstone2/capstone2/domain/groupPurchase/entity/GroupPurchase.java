@@ -1,11 +1,14 @@
 package com.capstone2.capstone2.domain.groupPurchase.entity;
 
 import com.capstone2.capstone2.domain.groupPurchase.dto.GroupPurchaseRequest;
+import com.capstone2.capstone2.domain.groupPurchase.handler.ParticipationHandler;
 import com.capstone2.capstone2.domain.member.entity.Member;
 import com.capstone2.capstone2.domain.model.enums.Status;
 import com.capstone2.capstone2.domain.model.entity.BaseEntity;
+import com.capstone2.capstone2.global.error.code.status.ErrorStatus;
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,8 +50,11 @@ public class GroupPurchase extends BaseEntity {
     @Column(nullable = false)
     private Integer price;
 
-    // 참여 인원 수
-    private Integer participants;
+    // 설정된 최대 참여 인원 수
+    private Integer maxParticipants;
+
+    // 현재 참여 인원 수
+    private Integer currentParticipants;
 
     // 작성자
     @ManyToOne(fetch = FetchType.LAZY)
@@ -72,6 +78,10 @@ public class GroupPurchase extends BaseEntity {
     @OneToMany(mappedBy = "groupPurchase", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GroupPurchaseImage> groupPurchaseImages = new ArrayList<>();
 
+    @Builder.Default
+    @OneToMany(mappedBy = "groupPurchase", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Participation> participations = new ArrayList<>();
+
     // 공동 구매 정보 수정
     public void updateGroupPurchase(GroupPurchaseRequest.GroupPurchaseUpdateDTO request) {
         this.title = request.getTitle();
@@ -79,7 +89,7 @@ public class GroupPurchase extends BaseEntity {
         this.place = request.getPlace();
         this.name = request.getName();
         this.quantity = request.getQuantity();
-        this.participants = request.getParticipants();
+        this.maxParticipants = request.getMaxParticipants();
         this.category1 = request.getCategory1();
         this.category2 = request.getCategory2();
         this.deadline = request.getDeadline();
@@ -95,5 +105,22 @@ public class GroupPurchase extends BaseEntity {
 
     public void increaseViews() {
         this.views += 1;
+    }
+
+    public void addParticipation(Participation participation) {
+        if (this.status != Status.ACTIVE) {
+            throw new ParticipationHandler(ErrorStatus.PARTICIPATION_NOT_ACTIVE);
+        }
+
+        if (this.currentParticipants >= this.maxParticipants) {
+            throw new ParticipationHandler(ErrorStatus.PARTICIPATION_UP_TO_MAX);
+        }
+
+        this.participations.add(participation);
+        this.currentParticipants += 1;
+
+        if (this.currentParticipants.equals(this.maxParticipants)) {
+            this.status = Status.COMPLETE;
+        }
     }
 }

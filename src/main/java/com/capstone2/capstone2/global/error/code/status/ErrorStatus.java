@@ -27,8 +27,13 @@ public enum ErrorStatus implements BaseErrorCode {
     MEMBER_ID_NULL(HttpStatus.BAD_REQUEST, "MEMBER_4001", "사용자 아이디는 필수 입니다."),
     MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER_4002", "사용자가 없습니다."),
 
+    // GroupPurchase 관련
     GROUP_PURCHASE_ID_NULL(HttpStatus.BAD_REQUEST, "GROUP_PURCHASE_4001", "공동구매 아이디는 필수 입니다."),
 
+    // Participation 관련
+    PARTICIPATION_UP_TO_MAX(HttpStatus.BAD_REQUEST, "PARTICIPATION_4001", "최대 참여 인원에 도달했습니다."),
+    PARTICIPATION_NOT_ACTIVE(HttpStatus.BAD_REQUEST, "PARTICIPATION_4002", "해당 공동 구매는 마감되었습니다"),
+    PARTICIPATION_ALREADY(HttpStatus.BAD_REQUEST, "PARTICIPATION_4003", "이미 해당 공동 구매에 참여중입니다.")
     ;
 
 

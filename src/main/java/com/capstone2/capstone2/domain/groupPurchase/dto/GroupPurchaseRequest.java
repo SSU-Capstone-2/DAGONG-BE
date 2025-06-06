@@ -19,7 +19,7 @@ public class GroupPurchaseRequest {
         private String category2;
         private int price;
         private int quantity;
-        private int participants;
+        private int maxParticipants;
     }
 
     @Data
@@ -31,7 +31,7 @@ public class GroupPurchaseRequest {
         private String name;
         private int quantity;
         private List<String> imageUrls;
-        private int participants;
+        private int maxParticipants;
         private String category1;
         private String category2;
         private LocalDateTime deadline;
