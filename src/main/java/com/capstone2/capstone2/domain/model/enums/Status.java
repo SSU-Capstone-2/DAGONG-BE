@@ -10,5 +10,5 @@ public enum Status {
 
     private final String status;
 
-    private Status(String status) { this.status = status; }
+    Status(String status) { this.status = status; }
 }

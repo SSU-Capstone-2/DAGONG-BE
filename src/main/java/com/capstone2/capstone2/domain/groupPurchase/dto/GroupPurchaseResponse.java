@@ -23,7 +23,8 @@ public class GroupPurchaseResponse {
         private Status status;
         private String place;
         private int price;
-        private int participants;
+        private int maxParticipants;
+        private int currentParticipants;
         private int views;
         private int likes;
         private LocalDateTime deadline;
@@ -40,7 +41,8 @@ public class GroupPurchaseResponse {
         private String name;
         private int quantity;
         private List<String> imageUrls;
-        private int participants;
+        private int maxParticipants;
+        private int currentParticipants;
         private String writerName;
         private String category1;
         private String category2;

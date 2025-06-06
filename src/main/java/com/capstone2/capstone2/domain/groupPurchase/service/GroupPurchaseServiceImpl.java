@@ -45,7 +45,7 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
 
         // 1. 공구 생성
         GroupPurchase groupPurchase = groupPurchaseRepository.save(
-                GroupPurchaseConverter.toGroupPurchase(member, request)
+                GroupPurchaseConverter.toCreateGroupPurchase(member, request)
         );
 
         // 2. 이미지 저장
@@ -142,5 +142,31 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
         }
 
         return groupPurchases.map(GroupPurchaseConverter::toGroupPurchaseListDTO);
+    }
+
+    @Override
+    @Transactional
+    public GroupPurchase participateGroupPurchase(Long groupPurchaseId, Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_ID_NULL));
+
+        GroupPurchase groupPurchase = groupPurchaseRepository.findById(groupPurchaseId)
+                .orElseThrow(() -> new GroupPurchaseHandler(ErrorStatus.GROUP_PURCHASE_ID_NULL));
+
+        // 중복 참여 방지
+        boolean alreadyParticipated = participationRepository.existsByMemberAndGroupPurchase(member, groupPurchase);
+        if (alreadyParticipated) {
+            throw new GroupPurchaseHandler(ErrorStatus.PARTICIPATION_ALREADY);
+        }
+
+        Participation participation = Participation.builder()
+                .member(member)
+                .groupPurchase(groupPurchase)
+                .build();
+
+        groupPurchase.addParticipation(participation);
+        participationRepository.save(participation);
+
+        return groupPurchase;
     }
 }

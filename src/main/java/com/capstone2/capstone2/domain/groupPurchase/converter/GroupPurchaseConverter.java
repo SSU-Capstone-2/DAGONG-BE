@@ -10,7 +10,7 @@ import com.capstone2.capstone2.domain.model.enums.Status;
 import java.util.List;
 
 public class GroupPurchaseConverter {
-    public static GroupPurchase toGroupPurchase(Member member, GroupPurchaseRequest.GroupPurchaseCreateDTO request) {
+    public static GroupPurchase toCreateGroupPurchase(Member member, GroupPurchaseRequest.GroupPurchaseCreateDTO request) {
         return GroupPurchase.builder()
                 .title(request.getTitle())
                 .name(request.getName())
@@ -18,7 +18,8 @@ public class GroupPurchaseConverter {
                 .category2(request.getCategory2())
                 .content(request.getContent())
                 .quantity(request.getQuantity())
-                .participants(request.getParticipants())
+                .maxParticipants(request.getMaxParticipants())
+                .currentParticipants(0)
                 .price(request.getPrice())
                 .views(0)
                 .likes(0)
@@ -47,7 +48,8 @@ public class GroupPurchaseConverter {
                 .title(groupPurchase.getTitle())
                 .price(groupPurchase.getPrice())
                 .place(groupPurchase.getPlace())
-                .participants(groupPurchase.getParticipants())
+                .maxParticipants(groupPurchase.getMaxParticipants())
+                .currentParticipants(groupPurchase.getCurrentParticipants())
                 .deadline(groupPurchase.getDeadline())
                 .status(groupPurchase.getStatus())
                 .views(groupPurchase.getViews())
@@ -65,7 +67,8 @@ public class GroupPurchaseConverter {
                 .name(groupPurchase.getName())
                 .quantity(groupPurchase.getQuantity())
                 .imageUrls(imageUrls)
-                .participants(groupPurchase.getParticipants())
+                .maxParticipants(groupPurchase.getMaxParticipants())
+                .currentParticipants(groupPurchase.getCurrentParticipants())
                 .writerName(writerName)
                 .category1(groupPurchase.getCategory1())
                 .category2(groupPurchase.getCategory2())

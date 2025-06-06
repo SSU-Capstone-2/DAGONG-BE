@@ -9,6 +9,7 @@ import com.capstone2.capstone2.global.common.response.ApiResponse;
 import com.capstone2.capstone2.global.error.code.status.SuccessStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -94,7 +95,7 @@ public class GroupPurchaseController {
        return ApiResponse.onSuccess(SuccessStatus.GROUP_PURCHASE_FETCH_RANKING_OK, response);
     }
 
-    // 특정 카테고리의 공구 목록 조회
+    // 특정 카테고리의 공구 목록 조회 API
     @GetMapping("/category")
     @Operation(summary = "카테고리별 공구 목록 조회", description = "대분류(category1), 소분류(cateogry2)를 기준으로 공구 목록을 조회하는 API입니다. 페이지는 1부터 시작합니다.")
     public ApiResponse<Page<GroupPurchaseResponse.GroupPurchaseListDTO>> getGroupPurchaseByCategory(
@@ -108,4 +109,19 @@ public class GroupPurchaseController {
         return ApiResponse.onSuccess(SuccessStatus.GROUP_PURCHASE_FETCH_BY_CATEGORY, response);
     }
 
+    // 공구 참여 API
+    @Operation(summary = "공동 구매 참여", description = "공동 구매에 사용자가 참여하는 API 입니다.")
+    @Parameters({
+            @Parameter(name = "groupPurchaseId", description = "사용자가 참여하고자 하는 공구의 ID 입니다", required = true),
+            @Parameter(name = "memberId", description = "공동 구매 참여자의 ID입니다. 추후 hidden을 수정 예정입니다.", required = true)
+    })
+    @PostMapping("/{groupPurchaseId}/participate/{memberId}")
+    public ApiResponse<GroupPurchaseResponse.GroupPurchaseIdDTO> participateGroupPurchase(
+            @PathVariable("groupPurchaseId") Long purchaseId,
+            @PathVariable("memberId") Long memberId
+    ){
+        GroupPurchase groupPurchase = groupPurchaseService.participateGroupPurchase(purchaseId, memberId);
+        GroupPurchaseResponse.GroupPurchaseIdDTO response = GroupPurchaseConverter.toGroupPurchaseIdDTO(groupPurchase);
+        return ApiResponse.onSuccess(SuccessStatus.GROUP_PURCHASE_PARTICIPATE_OK, response);
+    }
 }
