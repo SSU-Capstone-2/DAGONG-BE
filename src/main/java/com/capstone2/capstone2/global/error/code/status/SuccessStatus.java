@@ -26,6 +26,7 @@ public enum SuccessStatus implements BaseCode {
     GROUP_PURCHASE_FETCH_RANKING_OK(HttpStatus.OK, "GROUP_PURCHASE2006", "인기 공동 구매 조회가 완료되었습니다."),
     GROUP_PURCHASE_FETCH_BY_CATEGORY(HttpStatus.OK, "GROUP_PURCHASE2007", "카테고리 별 공동 구매 목록 조회가 완료되었습니다."),
     GROUP_PURCHASE_PARTICIPATE_OK(HttpStatus.OK, "GROUP_PURCHASE2008", "공동 구매 참여에 성공했습니다."),
+    GROUP_PURCHASE_PARTICIPATE_CANCEL_OK(HttpStatus.OK, "GROUP_PURCHASE2009", "공동 구매 참여 취소에 성공했습니다."),
 
     // 카카오 유저 확인 - 테스트용
     KAKAO_USER_FETCH_OK(HttpStatus.OK, "KAKAO_SE2001", "사용자 인증이 완료되었습니다.."),

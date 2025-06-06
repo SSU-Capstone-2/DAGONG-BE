@@ -14,4 +14,5 @@ public interface GroupPurchaseService {
     Page<GroupPurchaseResponse.GroupPurchaseListDTO> getPopularGroupPurchases(String sort, int page ,int size);
     Page<GroupPurchaseResponse.GroupPurchaseListDTO> getGroupPurchasesByCategory(String category1, String category2, int page, int size);
     GroupPurchase participateGroupPurchase(Long groupPurchaseId, Long memberId);
+    GroupPurchase cancelGroupPurchaseParticipate(Long groupPurchaseId, Long memberId);
 }
