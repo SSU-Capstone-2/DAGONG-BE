@@ -22,4 +22,15 @@ public class MemberConverter {
                 .build();
     }
 
+    // Entity → InfoDTO 변환
+    public static MemberResponseDTO.InfoDTO toInfoDTO(Member member) {
+        return MemberResponseDTO.InfoDTO.builder()
+                .id(member.getId())
+                .email(member.getEmail())
+                .nickname(member.getNickname())
+                .kakaoId(member.getKakaoId())
+                .profileUrl(member.getProfile_url())
+                .category(member.getCategory())
+                .build();
+    }
 }

@@ -10,7 +10,19 @@ public class MemberResponseDTO {
         private Long id;
         private String nickname;
         private String email;
-
         private String token; // 테스트용
     }
+
+    // 전체 회원 정보 조회용 DTO
+    @Getter
+    @Builder
+    public static class InfoDTO {
+        private Long id;
+        private String email;
+        private String nickname;
+        private Long kakaoId;
+        private String profileUrl;
+        private String category;
+    }
+
 }
