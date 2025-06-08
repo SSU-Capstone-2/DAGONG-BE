@@ -2,9 +2,11 @@ package com.capstone2.capstone2.domain.member.controller;
 
 import com.capstone2.capstone2.domain.member.dto.MemberRequestDTO;
 import com.capstone2.capstone2.domain.member.dto.MemberResponseDTO;
+import com.capstone2.capstone2.domain.member.entity.Member;
 import com.capstone2.capstone2.domain.member.service.MemberService;
 import com.capstone2.capstone2.global.common.response.ApiResponse;
 import com.capstone2.capstone2.global.error.code.status.SuccessStatus;
+import com.capstone2.capstone2.global.oauth.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,11 +20,13 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "멤버 API", description = "멤버 API입니다.")
 public class MemberController {
     private final MemberService memberService;
+    private final AuthService authService;
 
     @Operation(summary = "회원 정보 조회", description = "ID로 회원의 모든 정보를 조회합니다.")
     @Parameter(name = "id", description = "조회할 회원의 ID", required = true)
     @GetMapping("/{id}")
     public ApiResponse<MemberResponseDTO.InfoDTO> getMemberInfo(@PathVariable Long id) {
+        Member member = authService.getLoginUser();
         MemberResponseDTO.InfoDTO info = memberService.getMemberInfo(id);
         return ApiResponse.onSuccess(SuccessStatus.GET_MEMBER_SUCCESS, info);
     }
@@ -35,7 +39,7 @@ public class MemberController {
                     description = "수정할 닉네임 정보", required = true
             )
             @Valid @RequestBody MemberRequestDTO request) {
-
+        Member member = authService.getLoginUser();
         MemberResponseDTO.InfoDTO updated = memberService.updateNickname(id, request.getNickname());
         return ApiResponse.onSuccess(SuccessStatus.MEMBER_UPDATE_OK, updated);
     }
@@ -46,6 +50,7 @@ public class MemberController {
     public ApiResponse<Void> deleteMember(
             @PathVariable Long id
     ) {
+        Member member = authService.getLoginUser();
         memberService.deleteMember(id);
         return ApiResponse.onSuccess(SuccessStatus.MEMBER_DELETE_OK, null);
     }
