@@ -32,9 +32,9 @@ public enum SuccessStatus implements BaseCode {
     KAKAO_USER_FETCH_OK(HttpStatus.OK, "KAKAO_SE2001", "사용자 인증이 완료되었습니다.."),
 
     // 멤버
-    GET_MEMBER_SUCCESS(HttpStatus.OK, "KAKAO_SE2001", "회원 정보 조회 성공되었습니다..")
-
-
+    GET_MEMBER_SUCCESS(HttpStatus.OK, "MEMBER_SE2001", "회원 정보 조회 성공되었습니다.."),
+    MEMBER_UPDATE_OK(HttpStatus.OK, "MEMBER_SE2002", "회원정보 변경이 성공되었습니다.."),
+    MEMBER_DELETE_OK(HttpStatus.OK, "MEMBER_SE2002", "회원이 탈퇴되었습니다..")
     ;
 
     private final HttpStatus httpStatus;

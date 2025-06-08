@@ -21,5 +21,21 @@ public class MemberServiceImpl implements MemberService {
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_ID_NULL));
         return MemberConverter.toInfoDTO(member);
     }
+    @Override
+    public MemberResponseDTO.InfoDTO updateNickname(Long id, String nickname) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
 
+        member.setNickname(nickname);
+        Member saved = memberRepository.save(member);
+
+        return MemberConverter.toInfoDTO(saved);
+    }
+
+    @Override
+    public void deleteMember(Long id) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
+        memberRepository.delete(member);
+    }
 }
