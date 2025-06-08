@@ -1,8 +1,10 @@
 package com.capstone2.capstone2.domain.member.entity;
 
+import com.capstone2.capstone2.domain.chat.entity.ChatMessage;
 import com.capstone2.capstone2.domain.groupPurchase.entity.GroupPurchase;
 import com.capstone2.capstone2.domain.groupPurchase.entity.Participation;
 import com.capstone2.capstone2.domain.model.entity.BaseEntity;
+import com.capstone2.capstone2.domain.notification.entity.Notification;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -28,7 +30,7 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private String email;
 
-    @Column(length = 30, nullable = false)
+    @Column(nullable = false, length = 100)
     private String nickname;
 
     @Column(nullable = false)
@@ -45,4 +47,15 @@ public class Member extends BaseEntity {
     @Builder.Default
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Participation> participations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Notification> notifications = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MemberItemLike> likes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ChatMessage> sentMessages = new ArrayList<>();
+
+
 }
