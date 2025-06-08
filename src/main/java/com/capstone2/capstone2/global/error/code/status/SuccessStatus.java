@@ -29,12 +29,18 @@ public enum SuccessStatus implements BaseCode {
     GROUP_PURCHASE_PARTICIPATE_CANCEL_OK(HttpStatus.OK, "GROUP_PURCHASE2009", "공동 구매 참여 취소에 성공했습니다."),
 
     // 카카오 유저 확인 - 테스트용
-    KAKAO_USER_FETCH_OK(HttpStatus.OK, "KAKAO_SE2001", "사용자 인증이 완료되었습니다.."),
+    KAKAO_USER_FETCH_OK(HttpStatus.OK, "KAKAO_SE2001", "사용자 인증이 완료되었습니다."),
 
     // 멤버
-    GET_MEMBER_SUCCESS(HttpStatus.OK, "MEMBER_SE2001", "회원 정보 조회 성공되었습니다.."),
-    MEMBER_UPDATE_OK(HttpStatus.OK, "MEMBER_SE2002", "회원정보 변경이 성공되었습니다.."),
-    MEMBER_DELETE_OK(HttpStatus.OK, "MEMBER_SE2002", "회원이 탈퇴되었습니다..")
+    GET_MEMBER_SUCCESS(HttpStatus.OK, "MEMBER_SE2001", "회원 정보 조회 성공되었습니다."),
+    MEMBER_UPDATE_OK(HttpStatus.OK, "MEMBER_SE2002", "회원정보 변경이 성공되었습니다."),
+    MEMBER_DELETE_OK(HttpStatus.OK, "MEMBER_SE2002", "회원이 탈퇴되었습니다.."),
+
+    // 카테고리
+    CATEGORY_FETCH_ALL_OK(HttpStatus.OK, "CATEGORY_SE2001", "전체 카테고리가 조회되었습니다."),
+    CATEGORY_FETCH_MAIN_OK(HttpStatus.OK, "CATEGORY_SE2002", "메인 카테고리가 조회되었습니다."),
+    CATEGORY_FETCH_SUB_OK(HttpStatus.OK, "CATEGORY_SE2003", "서브 카테고리가 조회되었습니다."),
+
     ;
 
     private final HttpStatus httpStatus;
