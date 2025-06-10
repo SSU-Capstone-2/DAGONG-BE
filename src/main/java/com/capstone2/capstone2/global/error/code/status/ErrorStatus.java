@@ -35,6 +35,10 @@ public enum ErrorStatus implements BaseErrorCode {
     PARTICIPATION_NOT_ACTIVE(HttpStatus.BAD_REQUEST, "PARTICIPATION_4002", "해당 공동 구매는 마감되었습니다"),
     PARTICIPATION_ALREADY(HttpStatus.BAD_REQUEST, "PARTICIPATION_4003", "이미 해당 공동 구매에 참여중입니다."),
     PARTICIPATION_NOT_IN(HttpStatus.BAD_REQUEST, "PARTICIPATION_4004", "해당 공구에 참여 중이지 않습니다."),
+
+    // Chat 관련
+    CHAT_ROON_NOT_FOUND(HttpStatus.BAD_REQUEST, "CHATROOM_4001", "해당 채팅방은 존재하지 않습니다"),
+
     ;
 
 

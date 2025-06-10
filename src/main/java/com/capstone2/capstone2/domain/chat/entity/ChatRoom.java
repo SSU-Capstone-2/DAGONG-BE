@@ -20,7 +20,7 @@ public class ChatRoom extends BaseEntity {
     @Column(nullable = false, length = 20)
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "group_purchase_id", nullable = false)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "group_purchase_id", unique = true, nullable = false)
     private GroupPurchase groupPurchase;
 }
