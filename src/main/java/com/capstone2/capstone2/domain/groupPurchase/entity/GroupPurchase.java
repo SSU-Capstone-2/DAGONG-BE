@@ -1,5 +1,6 @@
 package com.capstone2.capstone2.domain.groupPurchase.entity;
 
+import com.capstone2.capstone2.domain.chat.entity.ChatRoom;
 import com.capstone2.capstone2.domain.groupPurchase.dto.GroupPurchaseRequest;
 import com.capstone2.capstone2.domain.groupPurchase.handler.ParticipationHandler;
 import com.capstone2.capstone2.domain.member.entity.Member;
@@ -81,6 +82,9 @@ public class GroupPurchase extends BaseEntity {
     @Builder.Default
     @OneToMany(mappedBy = "groupPurchase", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Participation> participations = new ArrayList<>();
+
+    @OneToOne(mappedBy = "groupPurchase", cascade = CascadeType.ALL, orphanRemoval = true)
+    private ChatRoom chatRoom;
 
     // 공동 구매 정보 수정
     public void updateGroupPurchase(GroupPurchaseRequest.GroupPurchaseUpdateDTO request) {
