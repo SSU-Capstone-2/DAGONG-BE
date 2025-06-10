@@ -83,7 +83,7 @@ public class GroupPurchase extends BaseEntity {
     @OneToMany(mappedBy = "groupPurchase", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Participation> participations = new ArrayList<>();
 
-    @OneToOne(mappedBy = "groupPurchase", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "groupPurchase", cascade = CascadeType.ALL, orphanRemoval = true)
     private ChatRoom chatRoom;
 
     // 공동 구매 정보 수정

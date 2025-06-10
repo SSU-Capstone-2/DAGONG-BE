@@ -28,12 +28,13 @@ public class ChatMessage extends BaseEntity {
     @Column(nullable = false)
     private MessageType messageType;
 
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_room_id", nullable = false)
     private ChatRoom chatRoom;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_id", nullable = false)
+    @JoinColumn(name = "sender_id", nullable = true)
     private Member sender;
 
     public static ChatMessage talk(ChatRoom chatRoom, Member sender, String content) {
@@ -61,4 +62,5 @@ public class ChatMessage extends BaseEntity {
                 .content(content)
                 .build();
     }
+
 }
