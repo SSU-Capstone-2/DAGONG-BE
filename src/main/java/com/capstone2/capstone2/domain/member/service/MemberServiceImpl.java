@@ -45,17 +45,7 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.delete(member);
     }
 
-//    @Override
-//    @Transactional
-//    public MemberResponseDTO.InfoDTO updateCategories(Long memberId, String mainCategory1, String subCategory2) {
-//        Member member = memberRepository.findById(memberId)
-//                .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
-//
-//        member.setMainCategory(mainCategory1);
-//        member.setSubCategory(subCategory2);
-//
-//        return MemberConverter.toInfoDTO(member);
-//    }
+
     private static final int MAX = 5;
     @Override
     @Transactional
@@ -70,7 +60,6 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
 
-        // 완전 교체: 기존 설정 초기화
         member.setMainCategory(null);
         member.setSubCategory(null);
 
