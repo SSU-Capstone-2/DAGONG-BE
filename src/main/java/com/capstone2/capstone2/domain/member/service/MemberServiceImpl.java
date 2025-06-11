@@ -6,6 +6,7 @@ import com.capstone2.capstone2.domain.member.entity.Member;
 import com.capstone2.capstone2.domain.member.handler.MemberHandler;
 import com.capstone2.capstone2.domain.member.repository.MemberRepository;
 import com.capstone2.capstone2.global.error.code.status.ErrorStatus;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -38,4 +39,17 @@ public class MemberServiceImpl implements MemberService {
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
         memberRepository.delete(member);
     }
+
+    @Override
+    @Transactional
+    public MemberResponseDTO.InfoDTO updateCategories(Long memberId, String mainCategory1, String subCategory2) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
+
+        member.setMainCategory(mainCategory1);
+        member.setSubCategory(subCategory2);
+
+        return MemberConverter.toInfoDTO(member);
+    }
+
 }

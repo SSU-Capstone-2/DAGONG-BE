@@ -41,6 +41,7 @@ public enum SuccessStatus implements BaseCode {
     CATEGORY_FETCH_MAIN_OK(HttpStatus.OK, "CATEGORY_SE2002", "메인 카테고리가 조회되었습니다."),
     CATEGORY_FETCH_SUB_OK(HttpStatus.OK, "CATEGORY_SE2003", "서브 카테고리가 조회되었습니다."),
 
+    CATEGORY_UPDATE_OK(HttpStatus.OK, "CATEGORY_SE2001", "관심 카테고리가 설정되었습니다..")
     ;
 
     private final HttpStatus httpStatus;

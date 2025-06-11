@@ -36,6 +36,12 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private Long kakaoId;
 
+    @Column(name = "main_category", length = 50)
+    private String mainCategory;      // 대분류
+
+    @Column(name = "sub_category", length = 50)
+    private String subCategory;       // 중분류
+
     private String profile_url;
 
     private String category;

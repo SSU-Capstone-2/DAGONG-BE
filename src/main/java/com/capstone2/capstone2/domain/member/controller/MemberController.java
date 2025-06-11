@@ -55,4 +55,19 @@ public class MemberController {
         return ApiResponse.onSuccess(SuccessStatus.MEMBER_DELETE_OK, null);
     }
 
+    @Operation(summary = "회원 관심 카테고리 설정", description = "대분류(mainCategory) 및 중분류(subCategory)를 문자열로 저장")
+    @PostMapping("/{memberId}/categories")
+    public ApiResponse<MemberResponseDTO.InfoDTO> updateCategories(
+            @PathVariable Long memberId,
+            @RequestBody MemberRequestDTO req) {
+//        Member member = authService.getLoginUser();
+        MemberResponseDTO.InfoDTO info = memberService.updateCategories(
+                memberId,
+                req.getMainCategory(),
+                req.getSubCategory()
+        );
+        return ApiResponse.onSuccess(SuccessStatus.CATEGORY_UPDATE_OK, info);
+    }
+
+
 }

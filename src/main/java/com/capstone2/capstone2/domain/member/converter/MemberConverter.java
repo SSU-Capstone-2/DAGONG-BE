@@ -30,7 +30,8 @@ public class MemberConverter {
                 .nickname(member.getNickname())
                 .kakaoId(member.getKakaoId())
                 .profileUrl(member.getProfile_url())
-                .category(member.getCategory())
+                .mainCategory(member.getMainCategory())
+                .subCategory(member.getSubCategory())
                 .build();
     }
 }
