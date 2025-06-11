@@ -1,5 +1,6 @@
 package com.capstone2.capstone2.domain.member.converter;
 
+import com.capstone2.capstone2.domain.member.dto.MemberCategoryResponseDTO;
 import com.capstone2.capstone2.domain.member.dto.MemberResponseDTO;
 import com.capstone2.capstone2.domain.member.entity.Member;
 
@@ -34,4 +35,13 @@ public class MemberConverter {
                 .subCategory(member.getSubCategory())
                 .build();
     }
+
+    public static MemberCategoryResponseDTO toCategoryResponseDTO(Member m) {
+        return MemberCategoryResponseDTO.builder()
+                .id(m.getId())
+                .mainCategory(m.getMainCategory())
+                .subCategory(m.getSubCategory())
+                .build();
+    }
+
 }

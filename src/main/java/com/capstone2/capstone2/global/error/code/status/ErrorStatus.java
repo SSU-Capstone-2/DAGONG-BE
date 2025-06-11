@@ -38,6 +38,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 카테고리관련
     MAIN_CATEGORY_NOT_FOUND(HttpStatus.BAD_REQUEST, "CATEGORY_4001", "해당 메인 카테고리가 없습니다."),
+    CATEGORY_UPDATE_EXCEED_LIMIT(HttpStatus.BAD_REQUEST, "CATEGORY_4002", "최대 5개까지만 등록할 수 있습니다.")
     ;
 
 
