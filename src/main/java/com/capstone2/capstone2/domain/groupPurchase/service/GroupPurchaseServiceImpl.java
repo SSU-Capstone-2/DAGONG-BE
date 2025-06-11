@@ -1,5 +1,10 @@
 package com.capstone2.capstone2.domain.groupPurchase.service;
 
+import com.capstone2.capstone2.domain.chat.entity.ChatMessage;
+import com.capstone2.capstone2.domain.chat.entity.ChatRoom;
+import com.capstone2.capstone2.domain.chat.handler.ChatRoomHandler;
+import com.capstone2.capstone2.domain.chat.repository.ChatMessageRepository;
+import com.capstone2.capstone2.domain.chat.repository.ChatRoomRepository;
 import com.capstone2.capstone2.domain.groupPurchase.converter.GroupPurchaseConverter;
 import com.capstone2.capstone2.domain.groupPurchase.dto.GroupPurchaseRequest;
 import com.capstone2.capstone2.domain.groupPurchase.dto.GroupPurchaseResponse;
@@ -35,6 +40,8 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
     private final GroupPurchaseRepository groupPurchaseRepository;
     private final GroupPurchaseImageRepository groupPurchaseImageRepository;
     private final ParticipationRepository participationRepository;
+    private final ChatRoomRepository chatRoomRepository;
+    private final ChatMessageRepository chatMessageRepository;
 
     // 공구 생성
     @Transactional
@@ -61,6 +68,22 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
         participationRepository.save(participation);
         groupPurchase.addParticipation(participation); // 리스트 추가 + 참여자 수 증가
 
+        // 4. 채팅방 생성
+        ChatRoom chatRoom = ChatRoom.builder()
+                .groupPurchase(groupPurchase)
+                .name(groupPurchase.getTitle())
+                .build();
+
+        // 5. 시스템 메시지 전송
+        ChatMessage systemMessage = ChatMessage.builder()
+                        .chatRoom(chatRoom)
+                        .messageType(ChatMessage.MessageType.SYSTEM)
+                        .content(member.getNickname() + "님이 입장하였습니다.")
+                        .sender(null)
+                        .build();
+
+        chatRoom.addMessage(systemMessage);
+        chatRoomRepository.save(chatRoom);
         return groupPurchase;
     }
 
@@ -169,6 +192,20 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
         participationRepository.save(participation);
         groupPurchase.addParticipation(participation);
 
+        // 채팅방 입장 시스템 메시지
+        ChatRoom chatRoom = chatRoomRepository.findByGroupPurchase(groupPurchase)
+                .orElseThrow(() -> new ChatRoomHandler(ErrorStatus.CHAT_ROON_NOT_FOUND));
+
+        ChatMessage enterMessage = ChatMessage.builder()
+                .chatRoom(chatRoom)
+                .messageType(ChatMessage.MessageType.SYSTEM)
+                .content(member.getNickname() + "님이 입장하였습니다.")
+                .sender(null)
+                .build();
+
+        chatRoom.addMessage(enterMessage);
+        chatRoomRepository.save(chatRoom);
+
         return groupPurchase;
     }
 
@@ -182,6 +219,8 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
         Participation participation = participationRepository.findByGroupPurchaseIdAndMemberId(groupPurchaseId, memberId)
                 .orElseThrow(() -> new ParticipationHandler(ErrorStatus.PARTICIPATION_NOT_IN));
 
+        Member member = participation.getMember();
+
         // 연결 끊기
         groupPurchase.getParticipations().remove(participation);
 
@@ -193,6 +232,22 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
 
         // Status 롤백
         groupPurchase.activeIfWasProceeding();
+
+        // 채팅방 퇴장 시스템 메시지 생성
+        ChatRoom chatRoom = chatRoomRepository.findByGroupPurchase(groupPurchase)
+                .orElseThrow(() -> new ChatRoomHandler(ErrorStatus.CHAT_ROON_NOT_FOUND));
+
+        ChatMessage exitMessage = ChatMessage.builder()
+                        .chatRoom(chatRoom)
+                        .messageType(ChatMessage.MessageType.SYSTEM)
+                        .content(member.getNickname() + "님이 퇴장하였습니다.")
+                        .sender(null)
+                        .build();
+
+        chatRoom.addMessage(exitMessage);
+        chatRoomRepository.save(chatRoom);
+
+        chatMessageRepository.save(exitMessage);
 
         return groupPurchase;
     }

@@ -13,20 +13,54 @@ import lombok.*;
 @AllArgsConstructor
 public class ChatMessage extends BaseEntity {
 
+    public enum MessageType {
+        TALK, SYSTEM, NOTICE
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String message;
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String content;
 
-    @Column(name = "is_read")
-    private Boolean isRead;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private MessageType messageType;
 
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_room_id", nullable = false)
     private ChatRoom chatRoom;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_id", nullable = false)
+    @JoinColumn(name = "sender_id", nullable = true)
     private Member sender;
+
+    public static ChatMessage talk(ChatRoom chatRoom, Member sender, String content) {
+        return ChatMessage.builder()
+                .chatRoom(chatRoom)
+                .sender(sender)
+                .messageType(MessageType.TALK)
+                .content(content)
+                .build();
+    }
+
+    public static ChatMessage system(ChatRoom chatRoom, String content) {
+        return ChatMessage.builder()
+                .chatRoom(chatRoom)
+                .messageType(MessageType.SYSTEM)
+                .content(content)
+                .build();
+    }
+
+    public static ChatMessage notice(ChatRoom chatRoom, Member sender, String content) {
+        return ChatMessage.builder()
+                .chatRoom(chatRoom)
+                .sender(sender)
+                .messageType(MessageType.NOTICE)
+                .content(content)
+                .build();
+    }
+
 }

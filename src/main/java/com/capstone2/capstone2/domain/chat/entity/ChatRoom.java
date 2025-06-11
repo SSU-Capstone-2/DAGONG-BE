@@ -5,6 +5,9 @@ import com.capstone2.capstone2.domain.model.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -20,7 +23,16 @@ public class ChatRoom extends BaseEntity {
     @Column(nullable = false, length = 20)
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "group_purchase_id", nullable = false)
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<ChatMessage> messages = new ArrayList<>();
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "group_purchase_id", unique = true, nullable = false)
     private GroupPurchase groupPurchase;
+
+    public void addMessage(ChatMessage message) {
+        messages.add(message);
+        message.setChatRoom(this);
+    }
 }

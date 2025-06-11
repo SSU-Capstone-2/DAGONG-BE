@@ -38,7 +38,11 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 카테고리관련
     MAIN_CATEGORY_NOT_FOUND(HttpStatus.BAD_REQUEST, "CATEGORY_4001", "해당 메인 카테고리가 없습니다."),
-    CATEGORY_UPDATE_EXCEED_LIMIT(HttpStatus.BAD_REQUEST, "CATEGORY_4002", "최대 5개까지만 등록할 수 있습니다.")
+    CATEGORY_UPDATE_EXCEED_LIMIT(HttpStatus.BAD_REQUEST, "CATEGORY_4002", "최대 5개까지만 등록할 수 있습니다."),
+
+    // Chat 관련
+    CHAT_ROON_NOT_FOUND(HttpStatus.BAD_REQUEST, "CHATROOM_4001", "해당 채팅방은 존재하지 않습니다"),
+
     ;
 
 
