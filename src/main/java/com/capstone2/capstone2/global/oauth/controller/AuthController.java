@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,10 +21,13 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @Value("${app.front.redirect-url}")
+    private String frontRedirectUrl;
 
     @GetMapping("/login/kakao")
-    @Operation(summary = "kakao login API", description = "kakao login용 API 입니다.")
-    public ApiResponse<MemberResponseDTO.JoinResultDTO> kakaoLogin(@RequestParam("code") String accessCode, HttpServletResponse httpServletResponse) {
+    @Operation(summary = "kakao login API", description = "인가 코드를 받아 로그인 처리 후 토큰과 사용자 정보를 JSON으로 반환합니다.")
+    public ApiResponse<MemberResponseDTO.JoinResultDTO> kakaoLogin(
+            @RequestParam("code") String accessCode, HttpServletResponse httpServletResponse) {
         System.out.println("🔥 kakaoLogin 실행됨");  // 이게 안 보이면 요청이 안 들어온 것
         Member member = authService.oAuthLogin(accessCode, httpServletResponse);
         return ApiResponse.onSuccess(SuccessStatus.USER_EMAIL_LOGIN_OK, MemberConverter.toJoinResultDTO(member));

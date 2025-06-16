@@ -5,7 +5,9 @@ import com.capstone2.capstone2.domain.member.dto.MemberCategoryRequestDTO;
 import com.capstone2.capstone2.domain.member.dto.MemberCategoryResponseDTO;
 import com.capstone2.capstone2.domain.member.dto.MemberResponseDTO;
 import com.capstone2.capstone2.domain.member.entity.Member;
+import com.capstone2.capstone2.domain.member.entity.MemberFavoriteCategory;
 import com.capstone2.capstone2.domain.member.handler.MemberHandler;
+import com.capstone2.capstone2.domain.member.repository.MemberFavoriteCategoryRepository;
 import com.capstone2.capstone2.domain.member.repository.MemberRepository;
 import com.capstone2.capstone2.global.error.code.status.ErrorStatus;
 import jakarta.transaction.Transactional;
@@ -47,6 +49,9 @@ public class MemberServiceImpl implements MemberService {
 
 
     private static final int MAX = 5;
+
+    private final MemberFavoriteCategoryRepository favRepo;
+
     @Override
     @Transactional
     public List<MemberCategoryResponseDTO> updateCategories(
@@ -60,20 +65,22 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
 
-        member.setMainCategory(null);
-        member.setSubCategory(null);
+        favRepo.deleteAllByMember(member);
 
         List<MemberCategoryResponseDTO> results = new ArrayList<>();
-
         for (MemberCategoryRequestDTO dto : reqList) {
-            // 요청 DTO의 값을 그대로 엔티티에 설정
-            member.setMainCategory(dto.getMainCategory());
-            member.setSubCategory(dto.getSubCategory());
+            String sub = dto.getSubCategory();
+            if (sub == null || sub.isBlank()) {
+                sub = null;
+            }
+            MemberFavoriteCategory fav = MemberFavoriteCategory.builder()
+                    .member(member)
+                    .mainCategory(dto.getMainCategory())
+                    .subCategory(dto.getSubCategory())
+                    .build();
+            MemberFavoriteCategory saved = favRepo.save(fav);
 
-            // 저장 및 즉시 반영
-            Member saved = memberRepository.save(member);
-
-            // 변환기 활용
+            // 3) 엔티티 → DTO 변환
             results.add(MemberConverter.toCategoryResponseDTO(saved));
         }
 

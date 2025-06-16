@@ -13,7 +13,6 @@ public interface MemberService {
 
     void deleteMember(Long id);
 
-
     List<MemberCategoryResponseDTO> updateCategories(
             Long memberId,
             List<MemberCategoryRequestDTO> reqList

@@ -3,6 +3,7 @@ package com.capstone2.capstone2.domain.member.converter;
 import com.capstone2.capstone2.domain.member.dto.MemberCategoryResponseDTO;
 import com.capstone2.capstone2.domain.member.dto.MemberResponseDTO;
 import com.capstone2.capstone2.domain.member.entity.Member;
+import com.capstone2.capstone2.domain.member.entity.MemberFavoriteCategory;
 
 public class MemberConverter {
     public static MemberResponseDTO.JoinResultDTO toJoinResultDTO(Member member) {
@@ -41,6 +42,14 @@ public class MemberConverter {
                 .id(m.getId())
                 .mainCategory(m.getMainCategory())
                 .subCategory(m.getSubCategory())
+                .build();
+    }
+
+    public static MemberCategoryResponseDTO toCategoryResponseDTO(MemberFavoriteCategory fav) {
+        return MemberCategoryResponseDTO.builder()
+                .id(fav.getId())
+                .mainCategory(fav.getMainCategory())
+                .subCategory(fav.getSubCategory())
                 .build();
     }
 
