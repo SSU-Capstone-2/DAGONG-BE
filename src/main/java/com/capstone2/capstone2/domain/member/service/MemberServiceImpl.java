@@ -4,10 +4,7 @@ import com.capstone2.capstone2.domain.groupPurchase.entity.GroupPurchase;
 import com.capstone2.capstone2.domain.groupPurchase.handler.GroupPurchaseHandler;
 import com.capstone2.capstone2.domain.groupPurchase.repository.GroupPurchaseRepository;
 import com.capstone2.capstone2.domain.member.converter.MemberConverter;
-import com.capstone2.capstone2.domain.member.dto.MemberCategoryRequestDTO;
-import com.capstone2.capstone2.domain.member.dto.MemberCategoryResponseDTO;
-import com.capstone2.capstone2.domain.member.dto.MemberItemLikeResponseDto;
-import com.capstone2.capstone2.domain.member.dto.MemberResponseDTO;
+import com.capstone2.capstone2.domain.member.dto.*;
 import com.capstone2.capstone2.domain.member.entity.Member;
 import com.capstone2.capstone2.domain.member.entity.MemberFavoriteCategory;
 import com.capstone2.capstone2.domain.member.entity.MemberItemLike;
@@ -138,21 +135,40 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<MemberItemLikeResponseDto> findLikesByMember(Long memberId) {
-        // (1) 멤버 존재 체크
+    public List<MemberLikedGroupPurchaseDto> findLikedGroupPurchases(Long memberId) {
         if (!memberRepository.existsById(memberId)) {
             throw new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND);
         }
 
-        // (2) 매핑 테이블에서 해당 멤버의 Like 목록 조회
-        List<MemberItemLike> likes = likeRepository.findAllByMemberId(memberId);
-
-        // (3) DTO로 변환
+        List<MemberItemLike> likes = likeRepository.findAllByMemberIdOrderByIdDesc(memberId);
+        //        return likes.stream()
+        //                .map(MemberItemLike::getGroupPurchase)
+        //                .map(gp -> new MemberLikedGroupPurchaseDto(
+        //                        gp.getId(),
+        //                        gp.getTitle(),
+        //                        gp.getImageUrl()
+        //                ))
+        //                .collect(Collectors.toList());
         return likes.stream()
-                .map(like -> new MemberItemLikeResponseDto(
-                        like.getMember().getId(),
-                        like.getGroupPurchase().getId()))
+                .map(MemberItemLike::getGroupPurchase)
+                .map(gp -> {
+                    String img = gp.getGroupPurchaseImages().stream()
+                            .findFirst()
+                            .map(imgEntity -> {
+                                return imgEntity.getImageUrl();
+                            })
+                            .orElse(null);
+
+                    return new MemberLikedGroupPurchaseDto(
+                            gp.getId(),
+                            gp.getTitle(),
+                            img
+                    );
+                })
                 .collect(Collectors.toList());
     }
+
+
+
 
 }

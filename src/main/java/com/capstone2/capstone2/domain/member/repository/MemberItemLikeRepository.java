@@ -9,6 +9,5 @@ import java.util.Optional;
 public interface MemberItemLikeRepository extends JpaRepository<MemberItemLike, Long> {
     boolean existsByMemberIdAndGroupPurchaseId(Long memberId, Long groupPurchaseId);
     Optional<MemberItemLike> findByMemberIdAndGroupPurchaseId(Long memberId, Long groupPurchaseId);
-    List<MemberItemLike> findAllByMemberId(Long memberId);
-
+    List<MemberItemLike> findAllByMemberIdOrderByIdDesc(Long memberId);
 }

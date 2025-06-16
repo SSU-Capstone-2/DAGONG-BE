@@ -92,12 +92,16 @@ public class MemberController {
     }
 
     @Operation(summary = "찜 조회", description = "멤버 id를 입력하면 찜을 누른 순서대로 목록이 반환됩니다.")
-    @GetMapping("/{memberId}/likes")
-    public ApiResponse<List<MemberItemLikeResponseDto>> getLikesByMember(
+    @GetMapping("/members/{memberId}/likes")
+    public ApiResponse<List<MemberLikedGroupPurchaseDto>> getLikedGroupPurchases(
             @PathVariable Long memberId) {
         Member member = authService.getLoginUser();
-        List<MemberItemLikeResponseDto> list = memberService.findLikesByMember(memberId);
-        return ApiResponse.onSuccess(SuccessStatus.LIKE_LIST_SUCCESS, list);
+        List<MemberLikedGroupPurchaseDto> list = memberService.findLikedGroupPurchases(memberId);
+        return ApiResponse.onSuccess(
+                SuccessStatus.LIKE_LIST_SUCCESS,
+                list
+        );
     }
+
 
 }
