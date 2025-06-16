@@ -64,7 +64,7 @@ public class MemberController {
     public ApiResponse<List<MemberCategoryResponseDTO>> updateCategories(
             @PathVariable Long memberId,
             @RequestBody List<MemberCategoryRequestDTO> reqList) {
-
+        Member member = authService.getLoginUser();
         List<MemberCategoryResponseDTO> info =
                 memberService.updateCategories(memberId, reqList);
 
@@ -76,7 +76,7 @@ public class MemberController {
     public ApiResponse<MemberItemLikeResponseDto> like(
             @PathVariable("groupPurchaseId") Long groupPurchaseId,
             @RequestParam Long memberId) {
-
+        Member member = authService.getLoginUser();
         MemberItemLikeResponseDto dto = memberService.like(memberId, groupPurchaseId);
         return ApiResponse.onSuccess(SuccessStatus.LIKE_SUCCESS, dto);
     }
@@ -86,14 +86,16 @@ public class MemberController {
     public ApiResponse<MemberItemLikeResponseDto> unlike(
             @PathVariable("groupPurchaseId") Long gpId,
             @RequestParam Long memberId) {
+        Member member = authService.getLoginUser();
         MemberItemLikeResponseDto dto = memberService.unlike(memberId, gpId);
         return ApiResponse.onSuccess(SuccessStatus.UNLIKE_SUCCESS, dto);
     }
 
+    @Operation(summary = "찜 조회", description = "멤버 id를 입력하면 찜을 누른 순서대로 목록이 반환됩니다.")
     @GetMapping("/{memberId}/likes")
     public ApiResponse<List<MemberItemLikeResponseDto>> getLikesByMember(
             @PathVariable Long memberId) {
-
+        Member member = authService.getLoginUser();
         List<MemberItemLikeResponseDto> list = memberService.findLikesByMember(memberId);
         return ApiResponse.onSuccess(SuccessStatus.LIKE_LIST_SUCCESS, list);
     }
