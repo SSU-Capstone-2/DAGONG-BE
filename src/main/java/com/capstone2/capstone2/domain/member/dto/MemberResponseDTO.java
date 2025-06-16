@@ -22,7 +22,8 @@ public class MemberResponseDTO {
         private String nickname;
         private Long kakaoId;
         private String profileUrl;
-        private String category;
+        private String mainCategory;
+        private String subCategory;
     }
 
 }

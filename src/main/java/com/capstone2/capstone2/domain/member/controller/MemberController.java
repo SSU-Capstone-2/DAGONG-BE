@@ -1,5 +1,7 @@
 package com.capstone2.capstone2.domain.member.controller;
 
+import com.capstone2.capstone2.domain.member.dto.MemberCategoryRequestDTO;
+import com.capstone2.capstone2.domain.member.dto.MemberCategoryResponseDTO;
 import com.capstone2.capstone2.domain.member.dto.MemberRequestDTO;
 import com.capstone2.capstone2.domain.member.dto.MemberResponseDTO;
 import com.capstone2.capstone2.domain.member.entity.Member;
@@ -13,6 +15,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -53,6 +57,19 @@ public class MemberController {
         Member member = authService.getLoginUser();
         memberService.deleteMember(id);
         return ApiResponse.onSuccess(SuccessStatus.MEMBER_DELETE_OK, null);
+    }
+
+
+    @Operation(summary = "회원 관심 카테고리 설정", description = "최대 5개까지 관심 카테고리를 등록 / 서브 카테고리 null 입력 가능")
+    @PostMapping("/{memberId}/categories")
+    public ApiResponse<List<MemberCategoryResponseDTO>> updateCategories(
+            @PathVariable Long memberId,
+            @RequestBody List<MemberCategoryRequestDTO> reqList) {
+
+        List<MemberCategoryResponseDTO> info =
+                memberService.updateCategories(memberId, reqList);
+
+        return ApiResponse.onSuccess(SuccessStatus.CATEGORY_UPDATE_OK, info);
     }
 
 }
