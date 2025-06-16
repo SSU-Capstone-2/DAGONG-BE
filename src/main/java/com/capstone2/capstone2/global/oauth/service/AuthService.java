@@ -4,6 +4,7 @@ import com.capstone2.capstone2.domain.member.dto.MemberResponseDTO;
 import com.capstone2.capstone2.domain.member.entity.Member;
 import com.capstone2.capstone2.domain.member.repository.MemberRepository;
 import com.capstone2.capstone2.global.error.code.status.ErrorStatus;
+import com.capstone2.capstone2.global.oauth.JwtTokenProvider;
 import com.capstone2.capstone2.global.oauth.converter.AuthConverter;
 import com.capstone2.capstone2.global.oauth.dto.KakaoDTO;
 import com.capstone2.capstone2.global.oauth.dto.KakaoTokenResponseDTO;
@@ -105,5 +106,9 @@ public class AuthService {
                 .email(member.getEmail())
                 .nickname(member.getNickname())
                 .build();
+    }
+    private final JwtTokenProvider jwtTokenProvider;  // 이 줄 추가
+    public String createToken(Member member) {
+        return jwtTokenProvider.generateToken(member.getId());
     }
 }

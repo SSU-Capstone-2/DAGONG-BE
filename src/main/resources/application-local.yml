@@ -36,9 +36,10 @@ kakao:
 #  redirect: http://localhost:8080/auth/login/kakao-test
 app:
   front:
-    redirect-url: http://localhost:3000/oauth2/redirect
+    redirect-url: http://localhost:5173/landing
 jwt:
   secret: ${JWT_SECRET}
+  expiration-ms: 3600000
 
 naver:
   search:
