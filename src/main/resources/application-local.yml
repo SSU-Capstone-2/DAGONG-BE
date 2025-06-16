@@ -32,8 +32,8 @@ spring:
 # --------------------------------------------------
 kakao:
   client: ${KAKAO_REST_API_KEY}       # 필수: 카카오 개발자 콘솔에서 발급받은 REST API 키
-  redirect: ${KAKAO_REDIRECT_URL}
-#  redirect: http://localhost:8080/auth/login/kakao-test
+#  redirect: ${KAKAO_REDIRECT_URL}
+  redirect: http://localhost:8080/auth/login/kakao-test
 app:
   front:
     redirect-url: http://localhost:5173/landing

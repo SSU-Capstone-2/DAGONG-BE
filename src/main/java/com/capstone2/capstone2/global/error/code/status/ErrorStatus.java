@@ -29,6 +29,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // GroupPurchase 관련
     GROUP_PURCHASE_ID_NULL(HttpStatus.BAD_REQUEST, "GROUP_PURCHASE_4001", "공동구매 아이디는 필수 입니다."),
+    GROUP_PURCHASE_NOT_FOUND(HttpStatus.BAD_REQUEST, "GROUP_PURCHASE_4002", "해당 공동구매가 없습니다."),
 
     // Participation 관련
     PARTICIPATION_UP_TO_MAX(HttpStatus.BAD_REQUEST, "PARTICIPATION_4001", "최대 참여 인원에 도달했습니다."),
@@ -43,7 +44,12 @@ public enum ErrorStatus implements BaseErrorCode {
     // Chat 관련
     CHAT_ROON_NOT_FOUND(HttpStatus.BAD_REQUEST, "CHATROOM_4001", "해당 채팅방은 존재하지 않습니다"),
 
-    ;
+    // 찜
+    ALREADY_LIKED(HttpStatus.BAD_REQUEST, "MEMBERLIKED_4001", "이미 좋아요를 눌렀습니다."),
+    LIKE_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBERLIKED_4002", "찜이 눌러져있지 않습니다."),
+
+
+            ;
 
 
     private final HttpStatus httpStatus;

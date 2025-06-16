@@ -2,6 +2,7 @@ package com.capstone2.capstone2.domain.member.service;
 
 import com.capstone2.capstone2.domain.member.dto.MemberCategoryRequestDTO;
 import com.capstone2.capstone2.domain.member.dto.MemberCategoryResponseDTO;
+import com.capstone2.capstone2.domain.member.dto.MemberItemLikeResponseDto;
 import com.capstone2.capstone2.domain.member.dto.MemberResponseDTO;
 
 import java.util.List;
@@ -17,4 +18,7 @@ public interface MemberService {
             Long memberId,
             List<MemberCategoryRequestDTO> reqList
     );
+    MemberItemLikeResponseDto like(Long memberId, Long groupPurchaseId);
+    MemberItemLikeResponseDto unlike(Long memberId, Long groupPurchaseId);
+    List<MemberItemLikeResponseDto> findLikesByMember(Long memberId);
 }

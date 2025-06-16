@@ -1,21 +1,28 @@
 package com.capstone2.capstone2.domain.member.service;
 
+import com.capstone2.capstone2.domain.groupPurchase.entity.GroupPurchase;
+import com.capstone2.capstone2.domain.groupPurchase.handler.GroupPurchaseHandler;
+import com.capstone2.capstone2.domain.groupPurchase.repository.GroupPurchaseRepository;
 import com.capstone2.capstone2.domain.member.converter.MemberConverter;
 import com.capstone2.capstone2.domain.member.dto.MemberCategoryRequestDTO;
 import com.capstone2.capstone2.domain.member.dto.MemberCategoryResponseDTO;
+import com.capstone2.capstone2.domain.member.dto.MemberItemLikeResponseDto;
 import com.capstone2.capstone2.domain.member.dto.MemberResponseDTO;
 import com.capstone2.capstone2.domain.member.entity.Member;
 import com.capstone2.capstone2.domain.member.entity.MemberFavoriteCategory;
+import com.capstone2.capstone2.domain.member.entity.MemberItemLike;
 import com.capstone2.capstone2.domain.member.handler.MemberHandler;
 import com.capstone2.capstone2.domain.member.repository.MemberFavoriteCategoryRepository;
+import com.capstone2.capstone2.domain.member.repository.MemberItemLikeRepository;
 import com.capstone2.capstone2.domain.member.repository.MemberRepository;
 import com.capstone2.capstone2.global.error.code.status.ErrorStatus;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -80,11 +87,72 @@ public class MemberServiceImpl implements MemberService {
                     .build();
             MemberFavoriteCategory saved = favRepo.save(fav);
 
-            // 3) 엔티티 → DTO 변환
             results.add(MemberConverter.toCategoryResponseDTO(saved));
         }
 
         return results;
+    }
+
+    private final GroupPurchaseRepository groupPurchaseRepository;
+    private final MemberItemLikeRepository likeRepository;
+
+    @Override
+    @Transactional
+    public MemberItemLikeResponseDto like(Long memberId, Long groupPurchaseId) {
+        if (likeRepository.existsByMemberIdAndGroupPurchaseId(memberId, groupPurchaseId)) {
+            throw new MemberHandler(ErrorStatus.ALREADY_LIKED);
+
+        }
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
+        GroupPurchase gp = groupPurchaseRepository.findById(groupPurchaseId)
+                .orElseThrow(() -> new GroupPurchaseHandler(ErrorStatus.GROUP_PURCHASE_NOT_FOUND));
+
+        MemberItemLike like = MemberItemLike.builder()
+                .member(member)
+                .groupPurchase(gp)
+                .build();
+        likeRepository.save(like);
+
+        gp.increaseLikes();
+        return new MemberItemLikeResponseDto(member.getId(), gp.getId());
+
+    }
+
+    @Override
+    @Transactional
+    public MemberItemLikeResponseDto unlike(Long memberId, Long groupPurchaseId) {
+        MemberItemLike like = likeRepository
+                .findByMemberIdAndGroupPurchaseId(memberId, groupPurchaseId)
+                .orElseThrow(() -> new MemberHandler(ErrorStatus.LIKE_NOT_FOUND));
+
+        likeRepository.delete(like);
+
+        GroupPurchase gp = like.getGroupPurchase();
+        gp.decreaseLikes();
+
+        return new MemberItemLikeResponseDto(memberId, groupPurchaseId);
+    }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<MemberItemLikeResponseDto> findLikesByMember(Long memberId) {
+        // (1) 멤버 존재 체크
+        if (!memberRepository.existsById(memberId)) {
+            throw new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND);
+        }
+
+        // (2) 매핑 테이블에서 해당 멤버의 Like 목록 조회
+        List<MemberItemLike> likes = likeRepository.findAllByMemberId(memberId);
+
+        // (3) DTO로 변환
+        return likes.stream()
+                .map(like -> new MemberItemLikeResponseDto(
+                        like.getMember().getId(),
+                        like.getGroupPurchase().getId()))
+                .collect(Collectors.toList());
     }
 
 }
