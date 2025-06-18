@@ -5,9 +5,10 @@ import com.capstone2.capstone2.domain.model.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -34,10 +35,10 @@ public class ChatMessage extends BaseEntity {
     private ChatRoom chatRoom;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_id", nullable = true)
+    @JoinColumn(name = "sender_id")
     private Member sender;
 
-    public static ChatMessage talk(ChatRoom chatRoom, Member sender, String content) {
+    public static ChatMessage talk(Member sender, ChatRoom chatRoom, String content) {
         return ChatMessage.builder()
                 .chatRoom(chatRoom)
                 .sender(sender)

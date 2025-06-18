@@ -10,26 +10,22 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class ChatRoom extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; // group_purchase_id 재사용
 
-    @Column(nullable = false, length = 20)
-    private String name;
+    @MapsId
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id")
+    private GroupPurchase groupPurchase;
+
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
     private List<ChatMessage> messages = new ArrayList<>();
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "group_purchase_id", unique = true, nullable = false)
-    private GroupPurchase groupPurchase;
 
     public void addMessage(ChatMessage message) {
         messages.add(message);
