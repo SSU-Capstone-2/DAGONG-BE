@@ -1,9 +1,6 @@
 package com.capstone2.capstone2.domain.member.controller;
 
-import com.capstone2.capstone2.domain.member.dto.MemberCategoryRequestDTO;
-import com.capstone2.capstone2.domain.member.dto.MemberCategoryResponseDTO;
-import com.capstone2.capstone2.domain.member.dto.MemberRequestDTO;
-import com.capstone2.capstone2.domain.member.dto.MemberResponseDTO;
+import com.capstone2.capstone2.domain.member.dto.*;
 import com.capstone2.capstone2.domain.member.entity.Member;
 import com.capstone2.capstone2.domain.member.service.MemberService;
 import com.capstone2.capstone2.global.common.response.ApiResponse;
@@ -14,6 +11,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -65,11 +64,44 @@ public class MemberController {
     public ApiResponse<List<MemberCategoryResponseDTO>> updateCategories(
             @PathVariable Long memberId,
             @RequestBody List<MemberCategoryRequestDTO> reqList) {
-
+        Member member = authService.getLoginUser();
         List<MemberCategoryResponseDTO> info =
                 memberService.updateCategories(memberId, reqList);
 
         return ApiResponse.onSuccess(SuccessStatus.CATEGORY_UPDATE_OK, info);
     }
+
+    @Operation(summary = "찜 설정", description = "멤버 id와 공구 id를 입력하면 찜 설정이 됩니다.")
+    @PostMapping("/{groupPurchaseId}/likes")
+    public ApiResponse<MemberItemLikeResponseDto> like(
+            @PathVariable("groupPurchaseId") Long groupPurchaseId,
+            @RequestParam Long memberId) {
+        Member member = authService.getLoginUser();
+        MemberItemLikeResponseDto dto = memberService.like(memberId, groupPurchaseId);
+        return ApiResponse.onSuccess(SuccessStatus.LIKE_SUCCESS, dto);
+    }
+
+    @Operation(summary = "찜 삭제", description = "멤버 id와 공구 id를 입력하면 찜이 해제 됩니다.")
+    @DeleteMapping("/{groupPurchaseId}/likes")
+    public ApiResponse<MemberItemLikeResponseDto> unlike(
+            @PathVariable("groupPurchaseId") Long gpId,
+            @RequestParam Long memberId) {
+        Member member = authService.getLoginUser();
+        MemberItemLikeResponseDto dto = memberService.unlike(memberId, gpId);
+        return ApiResponse.onSuccess(SuccessStatus.UNLIKE_SUCCESS, dto);
+    }
+
+    @Operation(summary = "찜 조회", description = "멤버 id를 입력하면 찜을 누른 순서대로 목록이 반환됩니다.")
+    @GetMapping("/members/{memberId}/likes")
+    public ApiResponse<List<MemberLikedGroupPurchaseDto>> getLikedGroupPurchases(
+            @PathVariable Long memberId) {
+        Member member = authService.getLoginUser();
+        List<MemberLikedGroupPurchaseDto> list = memberService.findLikedGroupPurchases(memberId);
+        return ApiResponse.onSuccess(
+                SuccessStatus.LIKE_LIST_SUCCESS,
+                list
+        );
+    }
+
 
 }
