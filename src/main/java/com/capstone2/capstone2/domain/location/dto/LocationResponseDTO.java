@@ -7,6 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LocationResponseDTO {
+    private Long   memberId;
     private String city;
     private String district;
     private String town;

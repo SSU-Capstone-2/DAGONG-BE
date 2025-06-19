@@ -21,5 +21,3 @@ public class Town extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "district_id")
     private District district;
-
-}
