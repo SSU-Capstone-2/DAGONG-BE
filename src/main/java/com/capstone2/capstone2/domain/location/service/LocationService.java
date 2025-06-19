@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -63,13 +64,32 @@ public class LocationService {
                 ));
 
         // 5) Town 조회·저장
-        Town town = townRepo.findByNameAndDistrict(townName, district)
-                .orElseGet(() -> townRepo.save(
-                        Town.builder()
-                                .name(townName)
-                                .district(district)
-                                .build()
-                ));
+//        Town town = townRepo.findByNameAndDistrict(townName, district)
+//                .orElseGet(() -> townRepo.save(
+//                        Town.builder()
+//                                .name(townName)
+//                                .district(district)
+//                                .build()
+//                ));
+        Optional<Town> existingTown = townRepo.findByNameAndDistrict(townName, district);
+
+        if (existingTown.isEmpty()) {
+            // 2) 멤버가 저장한 Town(동) 개수 조회
+            long savedCount = townRepo.countByDistrict_City_Member(member);
+
+            // 3) 이미 2개 이상이면 저장 차단
+            if (savedCount >= 2) {
+                throw new IllegalStateException("주소는 최대 2개까지만 저장할 수 있습니다.");
+            }
+            // 4) 2개 미만이면 새로 저장
+            Town newTown = Town.builder()
+                    .name(townName)
+                    .district(district)
+                    .build();
+            existingTown = Optional.of(townRepo.save(newTown));
+        }
+        Town town = existingTown.get();
+
 
         // 3) DTO 반환
         return new LocationResponseDTO(
