@@ -47,7 +47,8 @@ public class SecurityConfig {
             "/kakao-success",
             "/auth/user",
             "/member/**",
-            "/categories/**"
+            "/categories/**",
+            "/location/**"
     };
 
     @Bean
