@@ -108,7 +108,12 @@ public class AuthService {
                 .build();
     }
     private final JwtTokenProvider jwtTokenProvider;  // 이 줄 추가
+//    public String createToken(Member member) {
+//        return jwtTokenProvider.generateToken(member.getId());
+//    }
+    /** 인가 코드 처리 후 JWT 생성 */
     public String createToken(Member member) {
-        return jwtTokenProvider.generateToken(member.getId());
+        // 이메일 또는 고유 식별자를 토큰 subject로 사용
+        return jwtUtil.createAccessToken(member.getEmail());
     }
 }
