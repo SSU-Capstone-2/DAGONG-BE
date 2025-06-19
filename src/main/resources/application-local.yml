@@ -46,13 +46,3 @@ naver:
   search:
     client-id: ${NAVER_SEARCH_CLIENT_ID}
     client-secret: ${NAVER_SEARCH_CLIENT_SECRET}
-  map:
-    reverse-geocode:
-#      url: https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc
-#      client-id: fboakz6euk
-#      client-secret: WfhBXFsyF6YOX8U6v6vdM8CROZYldHM2uoKy53pf
-      url: https://vpc-openapi.apigw.ntruss.com/map-reversegeocode/v2/gc
-      client-id: tycfylwaup
-      client-secret: HgBESWBdFzt9EWGJOaYiFvlFyBShAF7grPlDiTXh
-#      client-id: ${NAVER_MAP_CLIENT_ID}
-#      client-secret: ${NAVER_MAP_CLIENT_SECRET}

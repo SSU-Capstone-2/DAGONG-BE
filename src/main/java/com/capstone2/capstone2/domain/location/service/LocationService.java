@@ -2,6 +2,8 @@ package com.capstone2.capstone2.domain.location.service;
 
 // LocationService.java
 import com.capstone2.capstone2.domain.kakaoMap.KakaoMapClient;
+import com.capstone2.capstone2.domain.location.dto.CityDistrictResponseDTO;
+import com.capstone2.capstone2.domain.location.dto.CityOnlyResponseDTO;
 import com.capstone2.capstone2.domain.location.dto.LocationRequestDTO;
 import com.capstone2.capstone2.domain.location.dto.LocationResponseDTO;
 import com.capstone2.capstone2.domain.location.entity.City;
@@ -44,9 +46,9 @@ public class LocationService {
         String fullAddr = kakaoMapClient.reverseGeocode(lat, lon);
         String[] parts = fullAddr.split(" ");
 
-        String cityName     = parts[0];
+        String cityName = parts[0];
         String districtName = parts[1];
-        String townName     = parts[2];
+        String townName = parts[2];
 
         // 2) DB 저장/조회
         City city = cityRepo.findByNameAndMember(cityName, member)
@@ -100,7 +102,7 @@ public class LocationService {
         return townRepo.findAllByDistrict_City_Member(member).stream()
                 .map(town -> {
                     District d = town.getDistrict();
-                    City c     = d.getCity();
+                    City c = d.getCity();
                     return new LocationResponseDTO(
                             member.getId(),
                             town.getId(),
@@ -146,6 +148,74 @@ public class LocationService {
         return member.getId();
     }
 
+    @Transactional(readOnly = true)
+    public CityOnlyResponseDTO getCityOnly(Long memberId, Long townId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다. id=" + memberId));
 
+        Town town = townRepo.findById(townId)
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 주소(town)입니다. townId=" + townId));
+
+        // 권한 확인
+        City city = town.getDistrict().getCity();
+        if (!city.getMember().getId().equals(member.getId())) {
+            throw new IllegalStateException("조회 권한이 없습니다.");
+        }
+
+        return new CityOnlyResponseDTO(
+                member.getId(),
+                town.getId(),
+                city.getName()
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public CityDistrictResponseDTO getCityAndDistrict(Long memberId, Long townId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다. id=" + memberId));
+
+        Town town = townRepo.findById(townId)
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 주소(town)입니다. townId=" + townId));
+
+        // 권한 확인
+        District district = town.getDistrict();
+        City city = district.getCity();
+        if (!city.getMember().getId().equals(member.getId())) {
+            throw new IllegalStateException("조회 권한이 없습니다.");
+        }
+
+        return new CityDistrictResponseDTO(
+                member.getId(),
+                town.getId(),
+                city.getName(),
+                district.getName()
+        );
+    }
+
+    // 기존 LocationResponseDTO getCityDistrictTown(Long ...) 와 동일하게 사용
+    @Transactional(readOnly = true)
+    public LocationResponseDTO getFullLocation(Long memberId, Long townId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다. id=" + memberId));
+
+        Town town = townRepo.findById(townId)
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 주소(town)입니다. townId=" + townId));
+
+        // 권한 확인
+        District district = town.getDistrict();
+        City city = district.getCity();
+        if (!city.getMember().getId().equals(member.getId())) {
+            throw new IllegalStateException("조회 권한이 없습니다.");
+        }
+
+        return new LocationResponseDTO(
+                member.getId(),
+                town.getId(),
+                city.getName(),
+                district.getName(),
+                town.getName()
+        );
+
+    }
 }
 
