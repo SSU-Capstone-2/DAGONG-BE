@@ -36,4 +36,24 @@ public class KakaoMapClient {
                         .path("/v2/local/geo/coord2address.json")
                         .queryParam("x", longitude)
                         .queryParam("y", latitude)
-                        .build
+                        .build())
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<Map<String,Object>>() {})
+                .block();
+
+        // 3) 파싱
+        @SuppressWarnings("unchecked")
+        List<Map<String,Object>> docs = (List<Map<String,Object>>) response.get("documents");
+        if (docs.isEmpty()) {
+            throw new IllegalStateException("주소 변환 결과가 없습니다.");
+        }
+
+        @SuppressWarnings("unchecked")
+        Map<String,Object> addr = (Map<String,Object>) docs.get(0).get("address");
+        String city     = (String) addr.get("region_1depth_name");
+        String district = (String) addr.get("region_2depth_name");
+        String town     = (String) addr.get("region_3depth_name");
+
+        return String.join(" ", city, district, town);
+    }
+}
