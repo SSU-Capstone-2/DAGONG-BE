@@ -28,14 +28,24 @@ public class AuthController {
     private String frontRedirectUrl;
 
 
+//    @GetMapping("/login/kakao")
+//    @Operation(summary = "kakao login (JSON)", description = "인가 코드로 JWT 교환 후 JSON 반환")
+//    public ApiResponse<LoginResponseDTO> kakaoLoginJson(
+//            @RequestParam("code") String accessCode, HttpServletResponse httpServletResponse) {
+//        Member member = authService.oAuthLogin(accessCode, httpServletResponse);
+//        String jwt = authService.createToken(member);
+//        MemberResponseDTO.JoinResultDTO userDto = MemberConverter.toJoinResultDTO(member);
+//        LoginResponseDTO responseDto = new LoginResponseDTO(jwt, userDto);
+//        return ApiResponse.onSuccess(SuccessStatus.USER_EMAIL_LOGIN_OK, responseDto);
+//    }
     @GetMapping("/login/kakao")
-    @Operation(summary = "kakao login (JSON)", description = "인가 코드 처리 후 JSON으로 토큰·유저 정보를 반환하고, 클라이언트에서 라우터 이동을 제어합니다.")
+    @Operation(summary = "kakao login (JSON)", description = "인가 코드로 JWT 교환 후 JSON 반환")
     public ApiResponse<LoginResponseDTO> kakaoLoginJson(
-            @RequestParam("code") String accessCode, HttpServletResponse httpServletResponse) {
-        Member member = authService.oAuthLogin(accessCode, httpServletResponse);
+            @RequestParam("code") String accessCode) {
+        Member member = authService.oAuthLogin(accessCode);
         String jwt = authService.createToken(member);
-        MemberResponseDTO.JoinResultDTO userDto = MemberConverter.toJoinResultDTO(member);
-        LoginResponseDTO responseDto = new LoginResponseDTO(jwt, userDto);
+        var userDto = MemberConverter.toJoinResultDTO(member);
+        var responseDto = new LoginResponseDTO(jwt, userDto);
         return ApiResponse.onSuccess(SuccessStatus.USER_EMAIL_LOGIN_OK, responseDto);
     }
 
@@ -51,4 +61,5 @@ public class AuthController {
         String redirectUri = String.format("%s?token=%s&userId=%d", frontRedirectUrl, jwt, member.getId());
         response.sendRedirect(redirectUri);
     }
+
 }
