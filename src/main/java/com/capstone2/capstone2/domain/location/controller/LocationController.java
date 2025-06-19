@@ -28,4 +28,6 @@ public class LocationController {
                 request.getLatitude(),
                 request.getLongitude()
         );
-   
+        return ApiResponse.onSuccess(SuccessStatus.LOCATION_CERTIFY_OK,dto);
+    }
+}

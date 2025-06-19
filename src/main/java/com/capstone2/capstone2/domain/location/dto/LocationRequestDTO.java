@@ -10,4 +10,5 @@ public class LocationRequestDTO {
     private Long memberId;
 
     private double latitude;
-   
+    private double longitude;
+}

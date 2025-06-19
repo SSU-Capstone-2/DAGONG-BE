@@ -55,4 +55,9 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
 	// Naver 관련
-	implementation 'org.springfra
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

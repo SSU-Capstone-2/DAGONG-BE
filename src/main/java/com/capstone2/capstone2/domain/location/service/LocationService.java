@@ -59,4 +59,25 @@ public class LocationService {
                         District.builder()
                                 .name(districtName)
                                 .city(city)
-                                .
+                                .build()
+                ));
+
+        // 5) Town 조회·저장
+        Town town = townRepo.findByNameAndDistrict(townName, district)
+                .orElseGet(() -> townRepo.save(
+                        Town.builder()
+                                .name(townName)
+                                .district(district)
+                                .build()
+                ));
+
+        // 3) DTO 반환
+        return new LocationResponseDTO(
+                member.getId(),
+                city.getName(),
+                district.getName(),
+                town.getName()
+        );
+    }
+}
+

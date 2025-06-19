@@ -69,4 +69,9 @@ public enum SuccessStatus implements BaseCode {
     public ReasonDTO getReasonHttpStatus() {
         return ReasonDTO.builder()
                 .message(message)
-    
+                .code(code)
+                .isSuccess(true)
+                .httpStatus(httpStatus)
+                .build();
+    }
+}
