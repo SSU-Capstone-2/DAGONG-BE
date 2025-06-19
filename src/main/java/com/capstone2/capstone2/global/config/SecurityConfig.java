@@ -42,11 +42,8 @@ public class SecurityConfig {
             "/refresh",
             "/search/**",
             "/purchases/**",
-            "/auth/login/kakao",
-            "/auth/login/kakao-test",
-            "/auth/kakao/token",         // 카카오 인가 코드를 받아서 토큰&프로필 반환
-            "/auth/kakao/login-join",     // 카카오 토큰&프로필 받아서 가입/로그인(자체 JWT 발급)
-            "/auth/login/kakao-test",
+            "/auth/login/**",
+            "/auth/kakao/**",         // 카카오 인가 코드를 받아서 토큰&프로필 반환
             "/kakao-success",
             "/auth/user",
             "/member/**",
@@ -79,8 +76,8 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOriginPatterns(List.of("*", "http://localhost:3000"));
-        config.setAllowedOrigins(List.of("http://localhost:3000"));
+        config.setAllowedOriginPatterns(List.of("*", "http://localhost:3000", "http://localhost:5173", "http://13.209.95.208:8080"));
+//        config.setAllowedOrigins(List.of("http://localhost:3000"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("*"));
