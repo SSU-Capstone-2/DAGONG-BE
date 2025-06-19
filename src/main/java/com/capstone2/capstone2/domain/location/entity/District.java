@@ -1,4 +1,4 @@
-package com.capstone2.capstone2.domain.member.entity;
+package com.capstone2.capstone2.domain.location.entity;
 
 import com.capstone2.capstone2.domain.model.entity.BaseEntity;
 import jakarta.persistence.*;
