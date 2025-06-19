@@ -19,8 +19,10 @@ import reactor.core.publisher.Mono;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -71,33 +73,78 @@ public class LocationService {
 //                                .district(district)
 //                                .build()
 //                ));
-        Optional<Town> existingTown = townRepo.findByNameAndDistrict(townName, district);
 
-        if (existingTown.isEmpty()) {
-            // 2) 멤버가 저장한 Town(동) 개수 조회
-            long savedCount = townRepo.countByDistrict_City_Member(member);
-
-            // 3) 이미 2개 이상이면 저장 차단
-            if (savedCount >= 2) {
-                throw new IllegalStateException("주소는 최대 2개까지만 저장할 수 있습니다.");
-            }
-            // 4) 2개 미만이면 새로 저장
-            Town newTown = Town.builder()
-                    .name(townName)
-                    .district(district)
-                    .build();
-            existingTown = Optional.of(townRepo.save(newTown));
+        // Town 저장 전 Address 개수 검사
+        long savedCount = townRepo.countByDistrict_City_Member(member);
+        if (savedCount >= 2) {
+            throw new IllegalStateException("주소는 최대 2개까지만 저장할 수 있습니다.");
         }
-        Town town = existingTown.get();
 
+        // 이미 저장된 동인지 확인
+        if (townRepo.findByNameAndDistrict(townName, district).isPresent()) {
+            // 중복 입력도 예외 처리
+            throw new IllegalStateException("이미 저장된 주소입니다.");
+        }
 
-        // 3) DTO 반환
+        // 2개 미만·중복 아님 → 저장
+        Town town = townRepo.save(Town.builder()
+                .name(townName)
+                .district(district)
+                .build());
+
         return new LocationResponseDTO(
                 member.getId(),
                 city.getName(),
                 district.getName(),
                 town.getName()
         );
+
+//        Optional<Town> existingTown = townRepo.findByNameAndDistrict(townName, district);
+//
+//        if (existingTown.isEmpty()) {
+//            // 2) 멤버가 저장한 Town(동) 개수 조회
+//            long savedCount = townRepo.countByDistrict_City_Member(member);
+//
+//            // 3) 이미 2개 이상이면 저장 차단
+//            if (savedCount >= 2) {
+//                throw new IllegalStateException("주소는 최대 2개까지만 저장할 수 있습니다.");
+//            }
+//            // 4) 2개 미만이면 새로 저장
+//            Town newTown = Town.builder()
+//                    .name(townName)
+//                    .district(district)
+//                    .build();
+//            existingTown = Optional.of(townRepo.save(newTown));
+//        }
+//        Town town = existingTown.get();
+//
+//
+//        // 3) DTO 반환
+//        return new LocationResponseDTO(
+//                member.getId(),
+//                city.getName(),
+//                district.getName(),
+//                town.getName()
+//        );
+    }
+
+    @Transactional(readOnly = true)
+    public List<LocationResponseDTO> getMemberLocations(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다. id=" + memberId));
+
+        return townRepo.findAllByDistrict_City_Member(member).stream()
+                .map(town -> {
+                    District d = town.getDistrict();
+                    City c     = d.getCity();
+                    return new LocationResponseDTO(
+                            member.getId(),
+                            c.getName(),
+                            d.getName(),
+                            town.getName()
+                    );
+                })
+                .collect(Collectors.toList());
     }
 }
 

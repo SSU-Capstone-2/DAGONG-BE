@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -29,5 +31,13 @@ public class LocationController {
                 request.getLongitude()
         );
         return ApiResponse.onSuccess(SuccessStatus.LOCATION_CERTIFY_OK,dto);
+    }
+
+    @GetMapping("/{memberId}")
+    public ApiResponse<List<LocationResponseDTO>> getMemberLocations(
+            @PathVariable Long memberId) {
+
+        List<LocationResponseDTO> list = locationService.getMemberLocations(memberId);
+        return ApiResponse.onSuccess(SuccessStatus.LOCATION_GET_OK, list);
     }
 }
