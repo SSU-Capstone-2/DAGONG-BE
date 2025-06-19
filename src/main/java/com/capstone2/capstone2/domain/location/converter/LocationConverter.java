@@ -12,6 +12,7 @@ public class LocationConverter {
     public static LocationResponseDTO toResponseDTO(Member member, City city, District district, Town town) {
         return new LocationResponseDTO(
                 member.getId(),
+                town.getId(),
                 city.getName(),
                 district.getName(),
                 town.getName()

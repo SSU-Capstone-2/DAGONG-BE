@@ -14,5 +14,5 @@ public interface TownRepository extends JpaRepository<Town, Long> {
     long countByDistrict_City_Member(Member member);
 
     List<Town> findAllByDistrict_City_Member(Member member);
-
+    long countByDistrict(District district);
 }

@@ -26,7 +26,7 @@ public class LocationController {
             @RequestBody LocationRequestDTO request) {
 
         LocationResponseDTO dto = locationService.authenticateLocation(
-                request.getMemberId(),      // 여기를 추가
+                request.getMemberId(),
                 request.getLatitude(),
                 request.getLongitude()
         );
@@ -39,5 +39,14 @@ public class LocationController {
 
         List<LocationResponseDTO> list = locationService.getMemberLocations(memberId);
         return ApiResponse.onSuccess(SuccessStatus.LOCATION_GET_OK, list);
+    }
+
+
+    @DeleteMapping("/{memberId}/{townId}")
+    public ApiResponse<Long> deleteLocation(
+            @PathVariable Long memberId,
+            @PathVariable Long townId) {
+        Long deletedMemberId = locationService.deleteLocation(memberId, townId);
+        return ApiResponse.onSuccess(SuccessStatus.LOCATION_DELETE_OK, deletedMemberId);
     }
 }

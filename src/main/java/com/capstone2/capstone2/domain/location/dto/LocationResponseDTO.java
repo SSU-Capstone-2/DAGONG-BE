@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 public class LocationResponseDTO {
     private Long   memberId;
+    private Long   townId;
     private String city;
     private String district;
     private String town;
