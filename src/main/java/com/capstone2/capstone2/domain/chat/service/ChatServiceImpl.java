@@ -26,6 +26,7 @@ public class ChatServiceImpl implements ChatService{
     @Transactional
     public ChatMessageDTO saveTalk(ChatMessageDTO chatMessageDTO, Long memberId) {
 
+        
         Member sender = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_ID_NULL));
 
