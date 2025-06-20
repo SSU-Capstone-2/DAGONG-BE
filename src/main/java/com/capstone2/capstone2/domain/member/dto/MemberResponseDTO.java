@@ -1,5 +1,6 @@
 package com.capstone2.capstone2.domain.member.dto;
 
+import com.capstone2.capstone2.domain.location.entity.Town;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -24,6 +25,7 @@ public class MemberResponseDTO {
         private String profileUrl;
         private String mainCategory;
         private String subCategory;
+        private Long currentTownId;
     }
 
 }

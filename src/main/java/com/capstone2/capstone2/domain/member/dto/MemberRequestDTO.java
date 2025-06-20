@@ -15,8 +15,8 @@ public class MemberRequestDTO {
 
     @NotBlank(message = "닉네임은 비어 있을 수 없습니다.")
     private String nickname;
-    private String mainCategory;
-    private String subCategory;
+//    private String mainCategory;
+//    private String subCategory;
 
 
 }
