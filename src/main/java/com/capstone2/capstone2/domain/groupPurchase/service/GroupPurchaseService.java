@@ -15,4 +15,14 @@ public interface GroupPurchaseService {
     Page<GroupPurchaseResponse.GroupPurchaseListDTO> getGroupPurchasesByCategory(String category1, String category2, int page, int size);
     GroupPurchase participateGroupPurchase(Long groupPurchaseId, Long memberId);
     GroupPurchase cancelGroupPurchaseParticipate(Long groupPurchaseId, Long memberId);
+
+
+    Page<GroupPurchaseResponse.GroupPurchaseListDTO> searchGroupPurchases(
+            Long memberId,
+            String itemName,
+            String category,    // nullable
+            String sort,        // views, oldest, likes, latest
+            int page,
+            int size
+    );
 }

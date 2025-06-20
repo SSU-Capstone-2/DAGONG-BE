@@ -57,6 +57,9 @@ public enum SuccessStatus implements BaseCode {
 
     // 채팅방
     CHATROOM_LIST_OK(HttpStatus.OK, "CHATROOM_2001", "채팅방 목록 조회가 완료되었습니다."),
+
+    // 검색
+    GROUP_PURCHASE_SEARCH_OK(HttpStatus.OK, "SEARCH_2001", "검색이 완료되었습니다."),
     ;
 
     private final HttpStatus httpStatus;

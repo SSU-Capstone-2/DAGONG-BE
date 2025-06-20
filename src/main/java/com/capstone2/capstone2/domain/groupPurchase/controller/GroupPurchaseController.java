@@ -140,4 +140,29 @@ public class GroupPurchaseController {
         GroupPurchaseResponse.GroupPurchaseIdDTO response = GroupPurchaseConverter.toGroupPurchaseIdDTO(groupPurchase);
         return ApiResponse.onSuccess(SuccessStatus.GROUP_PURCHASE_PARTICIPATE_CANCEL_OK, response);
     }
+
+    @Operation(
+            summary = "공구 검색 (품목명, 지역, 카테고리, 정렬, 페이징)",
+            description = "itemName: 검색어, category: 대분류 카테고리 (선택), sort: views|latest|oldest|likes (default=latest), "
+                    + "page:페이지번호(default=1), size:페이지크기(default=10), memberId:조회자의 ID"
+    )
+    @GetMapping("/search/items")
+    public ApiResponse<Page<GroupPurchaseResponse.GroupPurchaseListDTO>> searchItems(
+            @RequestParam("memberId") Long memberId,
+            @RequestParam("itemName") String itemName,
+            @RequestParam(value = "category", required = false) String category,
+            @RequestParam(value = "sort",    defaultValue = "latest") String sort,
+            @RequestParam(value = "page",    defaultValue = "1")      int page,
+            @RequestParam(value = "size",    defaultValue = "10")     int size
+    ) {
+        Page<GroupPurchaseResponse.GroupPurchaseListDTO> pageResult
+                = groupPurchaseService.searchGroupPurchases(
+                memberId, itemName, category, sort, page, size);
+
+        return ApiResponse.onSuccess(
+                SuccessStatus.GROUP_PURCHASE_SEARCH_OK, // enum에 추가 필요
+                pageResult
+        );
+    }
+
 }

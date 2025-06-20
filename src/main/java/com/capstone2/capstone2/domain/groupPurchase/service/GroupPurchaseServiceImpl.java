@@ -228,4 +228,56 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
 
         return groupPurchase;
     }
+
+    @Override
+    public Page<GroupPurchaseResponse.GroupPurchaseListDTO> searchGroupPurchases(
+            Long memberId,
+            String itemName,
+            String category,
+            String sort,
+            int page,
+            int size
+    ) {
+        // 1) 멤버 조회해서 currentTown.id 가져오기
+        Long townId = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_ID_NULL))
+                .getCurrentTown()
+                .getId();
+
+        // 2) 정렬 기준
+        Sort sorting;
+        switch (sort.toLowerCase()) {
+            case "views":
+                sorting = Sort.by(Sort.Order.desc("views"));
+                break;
+            case "oldest":
+                sorting = Sort.by(Sort.Direction.ASC, "createdAt");
+                break;
+            case "likes":
+                sorting = Sort.by(Sort.Direction.DESC, "likes");
+                break;
+            case "latest":
+            default:
+                sorting = Sort.by(Sort.Direction.DESC, "createdAt");
+                break;
+        }
+        Pageable pageable = PageRequest.of(page - 1, size, sorting);
+
+        // 3) 검색 실행
+        Page<GroupPurchase> results;
+        if (category != null && !category.isBlank()) {
+            results = groupPurchaseRepository
+                    .findByNameContainingAndCategory1AndWriter_CurrentTown_Id(
+                            itemName, category, townId, pageable);
+        } else {
+            results = groupPurchaseRepository
+                    .findByNameContainingAndWriter_CurrentTown_Id(
+                            itemName, townId, pageable);
+        }
+
+        // 4) DTO 변환
+        return results.map(GroupPurchaseConverter::toGroupPurchaseListDTO);
+    }
+
+
 }
