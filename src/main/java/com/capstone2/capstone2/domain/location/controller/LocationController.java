@@ -38,6 +38,29 @@ public class LocationController {
         return ApiResponse.onSuccess(SuccessStatus.LOCATION_CERTIFY_OK,dto);
     }
 
+    @Operation(summary = "현재 주소 조회", description = "현재 회원의 주소를 반환합니다.")
+    @GetMapping("/{memberId}/current")
+    public ApiResponse<LocationResponseDTO> getCurrentLocation(
+            @PathVariable Long memberId) {
+
+        LocationResponseDTO dto = locationService.getCurrentLocation(memberId);
+        return ApiResponse.onSuccess(SuccessStatus.LOCATION_CURRENT_CERTIFY_OK,dto);
+    }
+
+    /**
+     * 저장된 주소(최대 2개) 중 하나를
+     * “현재 주소”로 변경
+     */
+    @Operation(summary = "현재 주소 변경", description = "현재 회원의 주소를 변경합니다.")
+    @PutMapping("/{memberId}/current/{townId}")
+    public ApiResponse<LocationResponseDTO> switchCurrentTown(
+            @PathVariable Long memberId,
+            @PathVariable Long townId) {
+
+        LocationResponseDTO dto = locationService.changeCurrentTown(memberId, townId);
+        return ApiResponse.onSuccess(SuccessStatus.LOCATION_CURRENT_CHANGE_OK,dto);
+    }
+
     @Operation(summary = "주소 조회", description = "회원의 주소들을 조회합니다.")
     @GetMapping("/{memberId}")
     public ApiResponse<List<LocationResponseDTO>> getMemberLocations(

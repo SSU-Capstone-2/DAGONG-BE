@@ -22,4 +22,7 @@ public class Town extends BaseEntity {
     @JoinColumn(name = "district_id")
     private District district;
 
+    @Column(nullable = false)
+    private boolean isCurrent = false;
+
 }

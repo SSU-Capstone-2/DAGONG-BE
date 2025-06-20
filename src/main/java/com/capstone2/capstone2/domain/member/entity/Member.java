@@ -3,6 +3,7 @@ package com.capstone2.capstone2.domain.member.entity;
 import com.capstone2.capstone2.domain.chat.entity.ChatMessage;
 import com.capstone2.capstone2.domain.groupPurchase.entity.GroupPurchase;
 import com.capstone2.capstone2.domain.groupPurchase.entity.Participation;
+import com.capstone2.capstone2.domain.location.entity.Town;
 import com.capstone2.capstone2.domain.model.entity.BaseEntity;
 import com.capstone2.capstone2.domain.notification.entity.Notification;
 import jakarta.persistence.*;
@@ -62,6 +63,11 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ChatMessage> sentMessages = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "current_town_id")
+    private Town currentTown;
+
 
 
 }
