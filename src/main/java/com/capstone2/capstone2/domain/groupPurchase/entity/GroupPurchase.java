@@ -139,4 +139,20 @@ public class GroupPurchase extends BaseEntity {
             this.status = Status.ACTIVE;
         }
     }
+
+    public void increaseLikes() {
+        if (this.likes == null) {
+            this.likes = 0;
+        }
+        this.likes++;
+    }
+
+    public void decreaseLikes() {
+        if (this.likes == null || this.likes <= 0) {
+            this.likes = 0;
+        } else {
+            this.likes--;
+        }
+    }
+
 }

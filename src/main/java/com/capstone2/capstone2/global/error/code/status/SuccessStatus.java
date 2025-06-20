@@ -41,7 +41,17 @@ public enum SuccessStatus implements BaseCode {
     CATEGORY_FETCH_MAIN_OK(HttpStatus.OK, "CATEGORY_SE2002", "메인 카테고리가 조회되었습니다."),
     CATEGORY_FETCH_SUB_OK(HttpStatus.OK, "CATEGORY_SE2003", "서브 카테고리가 조회되었습니다."),
 
-    CATEGORY_UPDATE_OK(HttpStatus.OK, "CATEGORY_SE2001", "관심 카테고리가 설정되었습니다..")
+    CATEGORY_UPDATE_OK(HttpStatus.OK, "CATEGORY_SE2001", "관심 카테고리가 설정되었습니다.."),
+
+    // 찜
+    LIKE_SUCCESS(HttpStatus.OK, "MEMBERLIKED_SE2001", "찜 설정이 완료되었습니다."),
+    UNLIKE_SUCCESS(HttpStatus.OK, "MEMBERLIKED_SE2002", "찜 삭제가 완료되었습니다."),
+    LIKE_LIST_SUCCESS(HttpStatus.OK, "MEMBERLIKED_SE2003", "찜 목록 조회가 완료되었습니다."),
+
+    // 위치 인증
+    LOCATION_CERTIFY_OK(HttpStatus.OK, "LOCATION_SE2001", "현재 위치 검색이 완료되었습니다."),
+    LOCATION_GET_OK(HttpStatus.OK, "LOCATION_SE2002", "멤버 주소 조회가 완료되었습니다."),
+    LOCATION_DELETE_OK(HttpStatus.OK, "LOCATION_SE2003", "멤버 주소 삭제가 완료되었습니다."),
     ;
 
     private final HttpStatus httpStatus;
