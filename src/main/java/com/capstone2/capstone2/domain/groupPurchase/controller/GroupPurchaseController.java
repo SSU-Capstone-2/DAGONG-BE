@@ -52,7 +52,7 @@ public class GroupPurchaseController {
     // 공구 상세 조회 API
     @Operation(summary = "공동구매 상세 조회", description = "공동구매를 상세 조회하는 API입니다.")
     @Parameter(name = "groupPurchaseId", description = "상세 조회할 공동구매의 ID입니다.")
-    @GetMapping("/{groupPurchaseId}")
+    @GetMapping("detail/{groupPurchaseId}")
     public ApiResponse<GroupPurchaseResponse.GroupPurchaseDetailDTO> getGroupPurchaseDetail(
             @PathVariable("groupPurchaseId") Long groupPurchaseId
     ){
