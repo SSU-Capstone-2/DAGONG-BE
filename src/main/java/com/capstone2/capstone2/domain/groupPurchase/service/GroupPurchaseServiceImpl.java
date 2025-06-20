@@ -277,6 +277,7 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
                             itemName, districtName, pageable
                     );
         }
+
         // 4) DTO 변환
         return pageEnt.map(GroupPurchaseConverter::toGroupPurchaseListDTO);
     }

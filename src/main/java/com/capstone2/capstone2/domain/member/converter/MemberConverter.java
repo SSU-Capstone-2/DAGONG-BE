@@ -34,7 +34,11 @@ public class MemberConverter {
                 .profileUrl(member.getProfile_url())
                 .mainCategory(member.getMainCategory())
                 .subCategory(member.getSubCategory())
-                .build();
+                .currentTownId(
+                        member.getCurrentTown() != null
+                                ? member.getCurrentTown().getId()
+                                : null
+                )                .build();
     }
 
     public static MemberCategoryResponseDTO toCategoryResponseDTO(Member m) {
