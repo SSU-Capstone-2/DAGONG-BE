@@ -71,18 +71,8 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
         // 4. 채팅방 생성
         ChatRoom chatRoom = ChatRoom.builder()
                 .groupPurchase(groupPurchase)
-                .name(groupPurchase.getTitle())
                 .build();
 
-        // 5. 시스템 메시지 전송
-        ChatMessage systemMessage = ChatMessage.builder()
-                        .chatRoom(chatRoom)
-                        .messageType(ChatMessage.MessageType.SYSTEM)
-                        .content(member.getNickname() + "님이 입장하였습니다.")
-                        .sender(null)
-                        .build();
-
-        chatRoom.addMessage(systemMessage);
         chatRoomRepository.save(chatRoom);
         return groupPurchase;
     }
@@ -192,19 +182,6 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
         participationRepository.save(participation);
         groupPurchase.addParticipation(participation);
 
-        // 채팅방 입장 시스템 메시지
-        ChatRoom chatRoom = chatRoomRepository.findByGroupPurchase(groupPurchase)
-                .orElseThrow(() -> new ChatRoomHandler(ErrorStatus.CHAT_ROON_NOT_FOUND));
-
-        ChatMessage enterMessage = ChatMessage.builder()
-                .chatRoom(chatRoom)
-                .messageType(ChatMessage.MessageType.SYSTEM)
-                .content(member.getNickname() + "님이 입장하였습니다.")
-                .sender(null)
-                .build();
-
-        chatRoom.addMessage(enterMessage);
-        chatRoomRepository.save(chatRoom);
 
         return groupPurchase;
     }

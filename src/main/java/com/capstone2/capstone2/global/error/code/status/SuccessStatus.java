@@ -54,6 +54,9 @@ public enum SuccessStatus implements BaseCode {
     LOCATION_DELETE_OK(HttpStatus.OK, "LOCATION_SE2003", "멤버 주소 삭제가 완료되었습니다."),
     LOCATION_CURRENT_CERTIFY_OK(HttpStatus.OK, "LOCATION_SE2004", "멤버의 현재 주소가 조회되었습니다."),
     LOCATION_CURRENT_CHANGE_OK(HttpStatus.OK, "LOCATION_SE2005", "멤버의 현재 주소가 변경되었습니다."),
+
+    // 채팅방
+    CHATROOM_LIST_OK(HttpStatus.OK, "CHATROOM_2001", "채팅방 목록 조회가 완료되었습니다."),
     ;
 
     private final HttpStatus httpStatus;

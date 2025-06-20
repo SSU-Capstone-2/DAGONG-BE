@@ -48,7 +48,9 @@ public class SecurityConfig {
             "/auth/user",
             "/member/**",
             "/categories/**",
-            "/location/**"
+            "/location/**",
+            "/ws/**",
+            "/chat/**"
     };
 
     @Bean
