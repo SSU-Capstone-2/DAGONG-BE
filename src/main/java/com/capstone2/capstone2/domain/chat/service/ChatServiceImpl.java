@@ -2,6 +2,7 @@ package com.capstone2.capstone2.domain.chat.service;
 
 import com.capstone2.capstone2.domain.chat.converter.ChatMessageConverter;
 import com.capstone2.capstone2.domain.chat.dto.ChatMessageDTO;
+import com.capstone2.capstone2.domain.chat.dto.ChatMessageResponse;
 import com.capstone2.capstone2.domain.chat.entity.ChatMessage;
 import com.capstone2.capstone2.domain.chat.entity.ChatRoom;
 import com.capstone2.capstone2.domain.chat.repository.ChatMessageRepository;
@@ -12,7 +13,13 @@ import com.capstone2.capstone2.domain.member.repository.MemberRepository;
 import com.capstone2.capstone2.global.error.code.status.ErrorStatus;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -51,4 +58,6 @@ public class ChatServiceImpl implements ChatService{
         chatMessageRepository.save(sys);
         return ChatMessageConverter.toChatMessageDTO(sys);
     }
+
+
 }
