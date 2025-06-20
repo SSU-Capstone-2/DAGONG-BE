@@ -10,6 +10,7 @@ import com.capstone2.capstone2.global.common.response.ApiResponse;
 import com.capstone2.capstone2.global.error.code.status.SuccessStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,8 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/location")
+@Tag(name = "주소 API", description = "주소 관련 API")
+
 public class LocationController {
 
     private final LocationService locationService;
