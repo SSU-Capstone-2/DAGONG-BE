@@ -10,7 +10,7 @@ import com.capstone2.capstone2.domain.model.enums.Status;
 import java.util.List;
 
 public class GroupPurchaseConverter {
-    public static GroupPurchase toCreateGroupPurchase(Member member, GroupPurchaseRequest.GroupPurchaseCreateDTO request) {
+    public static GroupPurchase toCreateGroupPurchase(Member member, GroupPurchaseRequest.GroupPurchaseCreateDTO request, Long districtId) {
         return GroupPurchase.builder()
                 .title(request.getTitle())
                 .name(request.getName())
@@ -18,6 +18,7 @@ public class GroupPurchaseConverter {
                 .category2(request.getCategory2())
                 .content(request.getContent())
                 .quantity(request.getQuantity())
+                .currentDistrictId(districtId)
                 .maxParticipants(request.getMaxParticipants())
                 .currentParticipants(0)
                 .price(request.getPrice())

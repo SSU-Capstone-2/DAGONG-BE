@@ -37,13 +37,15 @@ public class GroupPurchaseController {
 
     // 공구 전체 목록 조회 API
     @Operation(summary = "공동구매 전체 목록 조회", description = "공동구매 전체 목록을 조회하는 API입니다. 페이지는 1부터 시작합니다.")
-    @GetMapping
+    @Parameter(name = "memberId", description = "공구를 등록하는 멤버의 ID, 추후 hidden으로 수정 예정입니다.")
+    @GetMapping("/{memberId}")
     public ApiResponse<Page<GroupPurchaseResponse.GroupPurchaseListDTO>> getAllGroupPurchases(
+        @PathVariable("memberId") Long memberId,
         @RequestParam(defaultValue = "1") int page,
         @RequestParam(defaultValue = "10") int size
     ){
 
-        Page<GroupPurchaseResponse.GroupPurchaseListDTO> response = groupPurchaseService.getAllPurchases(page, size);
+        Page<GroupPurchaseResponse.GroupPurchaseListDTO> response = groupPurchaseService.getAllPurchases(memberId, page, size);
         return ApiResponse.onSuccess(SuccessStatus.GROUP_PURCHASE_FETCH_ALL_OK, response);
     }
 

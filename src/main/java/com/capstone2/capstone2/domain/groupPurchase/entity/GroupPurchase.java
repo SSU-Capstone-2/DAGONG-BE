@@ -75,6 +75,9 @@ public class GroupPurchase extends BaseEntity {
     // 마감 예측 시간
     private LocalDateTime deadline;
 
+    @Column(name = "current_district_id", nullable = false)
+    private Long currentDistrictId;
+
     @Builder.Default
     @OneToMany(mappedBy = "groupPurchase", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GroupPurchaseImage> groupPurchaseImages = new ArrayList<>();
