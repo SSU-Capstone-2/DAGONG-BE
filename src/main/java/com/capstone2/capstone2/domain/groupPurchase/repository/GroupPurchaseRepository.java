@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.capstone2.capstone2.domain.model.enums.Status;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 
 public interface GroupPurchaseRepository extends JpaRepository<GroupPurchase, Long> {
@@ -25,18 +27,32 @@ public interface GroupPurchaseRepository extends JpaRepository<GroupPurchase, Lo
             Pageable pageable
     );
 
-    // ① 품목명 + 현재 동네의 구/군 이름으로 필터
-    Page<GroupPurchase> findByNameContainingAndWriter_CurrentTown_District_Name(
-            String name,
-            String districtName,
+    @Query("""
+  SELECT g FROM GroupPurchase g
+  JOIN District d ON g.currentDistrictId = d.id
+  WHERE LOWER(g.name) LIKE LOWER(CONCAT('%',:name,'%'))
+    AND LOWER(d.name) = LOWER(:districtName)
+""")
+    Page<GroupPurchase> searchByNameAndDistrictName(
+            @Param("name") String name,
+            @Param("districtName") String districtName,
             Pageable pageable
     );
 
-    // ② 품목명 + 카테고리 + 현재 동네의 구/군 이름으로 필터
-    Page<GroupPurchase> findByNameContainingAndCategory1AndWriter_CurrentTown_District_Name(
-            String name,
-            String category1,
-            String districtName,
+    // ② 품목명 + 카테고리 + 구/군명 검색
+    @Query("""
+    SELECT g
+      FROM GroupPurchase g
+      JOIN District d ON g.currentDistrictId = d.id
+     WHERE LOWER(g.name) LIKE LOWER(CONCAT('%', :name, '%'))
+       AND LOWER(g.category1) = LOWER(:category1)
+       AND LOWER(d.name) = LOWER(:districtName)
+  """)
+    Page<GroupPurchase> searchByNameAndCategoryAndDistrictName(
+            @Param("name") String name,
+            @Param("category1") String category1,
+            @Param("districtName") String districtName,
             Pageable pageable
     );
+
 }
