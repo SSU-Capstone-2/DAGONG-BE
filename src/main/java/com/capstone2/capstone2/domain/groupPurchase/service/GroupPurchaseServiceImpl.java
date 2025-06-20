@@ -19,6 +19,7 @@ import com.capstone2.capstone2.domain.groupPurchase.repository.ParticipationRepo
 import com.capstone2.capstone2.domain.member.entity.Member;
 import com.capstone2.capstone2.domain.member.handler.MemberHandler;
 import com.capstone2.capstone2.domain.member.repository.MemberRepository;
+import com.capstone2.capstone2.domain.model.enums.Status;
 import com.capstone2.capstone2.global.error.code.status.ErrorStatus;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -51,9 +52,11 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_ID_NULL));
 
+        Long districtId = member.getCurrentTown().getDistrict().getId();
+
         // 1. 공구 생성
         GroupPurchase groupPurchase = groupPurchaseRepository.save(
-                GroupPurchaseConverter.toCreateGroupPurchase(member, request)
+                GroupPurchaseConverter.toCreateGroupPurchase(member, request, districtId)
         );
 
         // 2. 이미지 저장
@@ -79,11 +82,18 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
 
     // 공구 전체 조회
     @Override
-    public Page<GroupPurchaseResponse.GroupPurchaseListDTO> getAllPurchases(int page, int size) {
+    public Page<GroupPurchaseResponse.GroupPurchaseListDTO> getAllPurchases(Long memberId, int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-        Page<GroupPurchase> groupPurchases = groupPurchaseRepository.findAll(pageable);
+        // Page<GroupPurchase> groupPurchases = groupPurchaseRepository.findAll(pageable);
 
-        return groupPurchases.map(GroupPurchaseConverter::toGroupPurchaseListDTO);
+        Long districtId = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_ID_NULL))
+                .getCurrentTown()
+                .getDistrict()
+                .getId();
+
+        return groupPurchaseRepository.findByStatusAndCurrentDistrictId(Status.ACTIVE, districtId, pageable)
+                .map(GroupPurchaseConverter::toGroupPurchaseListDTO);
     }
 
     // 공구 상세 조회

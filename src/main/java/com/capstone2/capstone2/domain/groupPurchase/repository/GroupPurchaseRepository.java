@@ -1,6 +1,7 @@
 package com.capstone2.capstone2.domain.groupPurchase.repository;
 
 import com.capstone2.capstone2.domain.groupPurchase.entity.GroupPurchase;
+import com.capstone2.capstone2.domain.model.enums.Status;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,4 +18,9 @@ public interface GroupPurchaseRepository extends JpaRepository<GroupPurchase, Lo
     Page<GroupPurchase> findByNameContainingAndCategory1AndWriter_CurrentTown_Id(
             String name, String category1, Long townId, Pageable pageable);
 
+    Page<GroupPurchase> findByStatusAndCurrentDistrictId(
+            Status status,
+            Long currentDistrictId,
+            Pageable pageable
+    );
 }
