@@ -248,40 +248,34 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
             int page,
             int size
     ) {
-        // 1) member → currentTown.district.name 획득
+        // 1) member → 자신의 동네 town → town.getDistrict().getName()
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_ID_NULL));
         String districtName = member.getCurrentTown()
                 .getDistrict()
                 .getName();
 
-        // 2) 정렬(Sort) 세팅
+        // 2) 정렬 객체
         Sort sorting = switch (sort.toLowerCase()) {
             case "views"  -> Sort.by(Sort.Order.desc("views"));
             case "oldest" -> Sort.by(Sort.Direction.ASC, "createdAt");
             case "likes"  -> Sort.by(Sort.Direction.DESC, "likes");
-            default       -> Sort.by(Sort.Direction.DESC, "createdAt");  // latest 기본
+            default       -> Sort.by(Sort.Direction.DESC, "createdAt");
         };
         Pageable pageable = PageRequest.of(page - 1, size, sorting);
 
-        // 3) Repository 호출 (districtName 으로 필터)
-        Page<GroupPurchase> pageEnt;
-        if (category != null && !category.isBlank()) {
-            pageEnt = groupPurchaseRepository
-                    .findByNameContainingAndCategory1AndWriter_CurrentTown_District_Name(
-                            itemName, category, districtName, pageable
-                    );
-        } else {
-            pageEnt = groupPurchaseRepository
-                    .findByNameContainingAndWriter_CurrentTown_District_Name(
-                            itemName, districtName, pageable
-                    );
-        }
+        // 3) Repository 호출: districtName 으로 필터
+        Page<GroupPurchase> pageEnt = (category != null && !category.isBlank())
+                ? groupPurchaseRepository
+                .searchByNameAndCategoryAndDistrictName(
+                        itemName, category, districtName, pageable)
+                : groupPurchaseRepository
+                .searchByNameAndDistrictName(
+                        itemName, districtName, pageable);
 
         // 4) DTO 변환
         return pageEnt.map(GroupPurchaseConverter::toGroupPurchaseListDTO);
     }
-
 
 
 }

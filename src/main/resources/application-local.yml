@@ -26,7 +26,12 @@ spring:
     view:
       prefix: /templates/   # Thymeleaf 뷰 파일 위치 (classpath:/templates/)
       suffix: .html         # 뷰 파일 확장자
-
+  data:
+    elasticsearch:
+      client:
+        endpoints: localhost:9200
+      repositories:
+        enabled: true
 # --------------------------------------------------
 # 3. 카카오 OAuth 설정
 # --------------------------------------------------

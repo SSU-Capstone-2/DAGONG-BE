@@ -89,6 +89,14 @@ public class GroupPurchase extends BaseEntity {
     @OneToOne(mappedBy = "groupPurchase", cascade = CascadeType.ALL, orphanRemoval = true)
     private ChatRoom chatRoom;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "current_district_id",      // FK 컬럼
+            referencedColumnName = "id",       // District 엔티티 PK
+            insertable = false,
+            updatable = false
+    )
+
     // 공동 구매 정보 수정
     public void updateGroupPurchase(GroupPurchaseRequest.GroupPurchaseUpdateDTO request) {
         this.title = request.getTitle();

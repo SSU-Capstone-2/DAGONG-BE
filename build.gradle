@@ -60,6 +60,9 @@ dependencies {
 
 	// Naver 관련
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+	// Elastic
+	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
 }
 
 tasks.named('test') {
