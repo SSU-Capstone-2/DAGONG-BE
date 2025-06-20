@@ -34,10 +34,10 @@ public class ChatMessage extends BaseEntity {
     private ChatRoom chatRoom;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_id", nullable = true)
+    @JoinColumn(name = "sender_id")
     private Member sender;
 
-    public static ChatMessage talk(ChatRoom chatRoom, Member sender, String content) {
+    public static ChatMessage talk(Member sender, ChatRoom chatRoom, String content) {
         return ChatMessage.builder()
                 .chatRoom(chatRoom)
                 .sender(sender)
