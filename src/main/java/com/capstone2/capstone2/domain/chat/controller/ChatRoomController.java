@@ -1,6 +1,7 @@
 package com.capstone2.capstone2.domain.chat.controller;
 
 import com.capstone2.capstone2.domain.chat.dto.ChatRoomDTO;
+import com.capstone2.capstone2.domain.chat.dto.MemberInfoDTO;
 import com.capstone2.capstone2.domain.chat.service.ChatRoomService;
 import com.capstone2.capstone2.domain.chat.service.ChatService;
 import com.capstone2.capstone2.domain.location.dto.MemberCoordinatesDTO;
@@ -43,4 +44,12 @@ public class ChatRoomController {
         return ApiResponse.onSuccess(SuccessStatus.CHATROOM_COORDINATES_OK, data);
     }
 
+    @GetMapping("/rooms/{chatRoomId}/members")
+    @Operation(summary = "채팅방 참여 멤버 조회",
+            description = "채팅방 참여 멤버들의 ID와 닉네임을 반환합니다.")
+    public ApiResponse<List<MemberInfoDTO>> getChatRoomMembers(
+            @PathVariable Long chatRoomId) {
+        List<MemberInfoDTO> data = chatRoomService.getChatRoomMembers(chatRoomId);
+        return ApiResponse.onSuccess(SuccessStatus.CHATROOM_MEMBER_LIST_OK, data);
+    }
 }

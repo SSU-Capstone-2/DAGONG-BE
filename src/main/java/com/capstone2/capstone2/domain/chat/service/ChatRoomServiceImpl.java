@@ -2,6 +2,7 @@ package com.capstone2.capstone2.domain.chat.service;
 
 import com.capstone2.capstone2.domain.chat.converter.ChatRoomConverter;
 import com.capstone2.capstone2.domain.chat.dto.ChatRoomDTO;
+import com.capstone2.capstone2.domain.chat.dto.MemberInfoDTO;
 import com.capstone2.capstone2.domain.chat.entity.ChatMessage;
 import com.capstone2.capstone2.domain.chat.entity.ChatRoom;
 import com.capstone2.capstone2.domain.chat.repository.ChatMessageRepository;
@@ -80,5 +81,24 @@ public class ChatRoomServiceImpl implements ChatRoomService{
                 })
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<MemberInfoDTO> getChatRoomMembers(Long chatRoomId) {
+        ChatRoom room = chatRoomRepository.findById(chatRoomId)
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 채팅방입니다. id=" + chatRoomId));
+
+        Long gpId = room.getGroupPurchase().getId();
+        return participationRepository.findAllByGroupPurchaseId(gpId).stream()
+                .map(Participation::getMember)
+                .distinct()
+                .map(m -> new MemberInfoDTO(
+                        m.getId(),
+                        m.getNickname(),
+                        m.getProfile_url()      // ← 여기서 프로필 URL 꺼내서 넣어줍니다
+                ))
+                .collect(Collectors.toList());
+    }
+
+
 
 }
