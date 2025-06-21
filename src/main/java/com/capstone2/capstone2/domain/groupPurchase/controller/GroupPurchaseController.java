@@ -165,6 +165,7 @@ public class GroupPurchaseController {
                 SuccessStatus.GROUP_PURCHASE_SEARCH_OK,
                 pageResult
         );
+
         
     }
 
