@@ -55,4 +55,6 @@ public interface GroupPurchaseRepository extends JpaRepository<GroupPurchase, Lo
             Pageable pageable
     );
 
+
+    Page<GroupPurchase> findByWriter_Id(Long writerId, Pageable pageable);
 }

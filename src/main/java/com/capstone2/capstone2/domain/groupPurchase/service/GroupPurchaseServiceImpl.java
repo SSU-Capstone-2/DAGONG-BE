@@ -277,5 +277,16 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
         return pageEnt.map(GroupPurchaseConverter::toGroupPurchaseListDTO);
     }
 
+    @Override
+    public Page<GroupPurchaseResponse.GroupPurchaseListDTO> getMyGroupPurchases(Long memberId, int page, int size) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_ID_NULL));
+
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+
+        Page<GroupPurchase> pageEnt = groupPurchaseRepository.findByWriter_Id(member.getId(), pageable);
+
+        return pageEnt.map(GroupPurchaseConverter::toGroupPurchaseListDTO);
+    }
 
 }
