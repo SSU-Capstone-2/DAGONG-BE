@@ -50,7 +50,7 @@ public class SecurityConfig {
             "/categories/**",
             "/location/**",
             "/ws/**",
-            "/chat/**"
+            "/chat/**",
     };
 
     @Bean

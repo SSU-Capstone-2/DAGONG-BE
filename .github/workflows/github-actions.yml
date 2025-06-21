@@ -1,4 +1,4 @@
-name: Dagong github actions CI/CD
+name: Capstone-Dagong github actions CI/CD
 
 on:
   pull_request:

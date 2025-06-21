@@ -173,7 +173,7 @@ public class GroupPurchaseController {
             @Parameter(name = "memberId", description = "멤버 ID")
     )
     @GetMapping("/mine/{memberId}")
-    public ApiResponse<?> getMyGroupPurchases(
+    public ApiResponse<Page<GroupPurchaseResponse.GroupPurchaseListDTO>> getMyGroupPurchases(
             @PathVariable("memberId") Long memberId,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "20") int size
@@ -190,7 +190,7 @@ public class GroupPurchaseController {
             @Parameter(name = "memberId", description = "멤버 ID")
     )
     @GetMapping("/participate/{memberId}")
-    public ApiResponse<?> getParticipatingPurchases(
+    public ApiResponse<Page<GroupPurchaseResponse.GroupPurchaseListDTO>> getParticipatingPurchases(
             @PathVariable("memberId") Long memberId,
             @RequestParam(defaultValue =  "1") int page,
             @RequestParam(defaultValue = "20") int size

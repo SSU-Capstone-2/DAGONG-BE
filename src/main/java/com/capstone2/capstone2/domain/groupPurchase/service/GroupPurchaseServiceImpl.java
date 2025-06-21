@@ -299,6 +299,7 @@ public class GroupPurchaseServiceImpl implements GroupPurchaseService{
         Page<Participation> partPage =
                 participationRepository.findByMember_Id(member.getId(), pageable);
 
+
         return partPage.map(p -> GroupPurchaseConverter.toGroupPurchaseListDTO(p.getGroupPurchase()));
     }
 }
