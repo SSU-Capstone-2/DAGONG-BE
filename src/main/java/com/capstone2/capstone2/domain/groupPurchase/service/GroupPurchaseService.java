@@ -27,4 +27,5 @@ public interface GroupPurchaseService {
     );
 
     Page<GroupPurchaseResponse.GroupPurchaseListDTO> getMyGroupPurchases(Long memberId, int page, int size);
+    Page<GroupPurchaseResponse.GroupPurchaseListDTO> getParticipatingPurchases(Long memberId, int page, int size);
 }

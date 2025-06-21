@@ -183,4 +183,21 @@ public class GroupPurchaseController {
 
         return ApiResponse.onSuccess(SuccessStatus.GROUP_PURCHASE_MINE_OK, result);
     }
+
+    // 내가 참여중인 공구 목록 조회 API
+    @Operation(summary = "내가 참여중인 공구 목록", description = "사용자가 참여자로 속해 있는 공구를 최신순으로 페이징 조회하는 API입니다.")
+    @Parameters(
+            @Parameter(name = "memberId", description = "멤버 ID")
+    )
+    @GetMapping("/participate/{memberId}")
+    public ApiResponse<?> getParticipatingPurchases(
+            @PathVariable("memberId") Long memberId,
+            @RequestParam(defaultValue =  "1") int page,
+            @RequestParam(defaultValue = "20") int size
+    ) {
+        Page<GroupPurchaseResponse.GroupPurchaseListDTO> result =
+                groupPurchaseService.getParticipatingPurchases(memberId, page, size);
+
+        return ApiResponse.onSuccess(SuccessStatus.GROUP_PURCHASE_PARTICIPATING_OK, result);
+    }
 }
