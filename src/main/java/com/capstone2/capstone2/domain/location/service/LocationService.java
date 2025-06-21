@@ -8,9 +8,11 @@ import com.capstone2.capstone2.domain.location.dto.LocationRequestDTO;
 import com.capstone2.capstone2.domain.location.dto.LocationResponseDTO;
 import com.capstone2.capstone2.domain.location.entity.City;
 import com.capstone2.capstone2.domain.location.entity.District;
+import com.capstone2.capstone2.domain.location.entity.MemberCoordinate;
 import com.capstone2.capstone2.domain.location.entity.Town;
 import com.capstone2.capstone2.domain.location.repository.CityRepository;
 import com.capstone2.capstone2.domain.location.repository.DistrictRepository;
+import com.capstone2.capstone2.domain.location.repository.MemberCoordinateRepository;
 import com.capstone2.capstone2.domain.location.repository.TownRepository;
 import com.capstone2.capstone2.domain.kakaoMap.KakaoMapClient;
 import com.capstone2.capstone2.domain.member.entity.Member;
@@ -35,6 +37,7 @@ public class LocationService {
     private final DistrictRepository districtRepo;
     private final TownRepository townRepo;
     private final MemberRepository memberRepository;
+    private final MemberCoordinateRepository memberCoordinateRepository;
 
     @Transactional
     public LocationResponseDTO authenticateLocation(Long memberId, double lat, double lon) {
@@ -42,7 +45,15 @@ public class LocationService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다. id=" + memberId));
 
-        // 1) 카카오 API 호출해서 "시도 구군 읍면동" 얻기
+        // 위도/경도 저장
+        MemberCoordinate coord = MemberCoordinate.builder()
+                .member(member)
+                .latitude(lat)
+                .longitude(lon)
+                .build();
+        memberCoordinateRepository.save(coord);
+
+        // 카카오 API 호출해서 "시도 구군 읍면동" 얻기
         String fullAddr = kakaoMapClient.reverseGeocode(lat, lon);
         String[] parts = fullAddr.split(" ");
 
@@ -50,7 +61,6 @@ public class LocationService {
         String districtName = parts[1];
         String townName = parts[2];
 
-        // 2) DB 저장/조회
         City city = cityRepo.findByNameAndMember(cityName, member)
                 .orElseGet(() -> cityRepo.save(
                         City.builder()
@@ -86,7 +96,7 @@ public class LocationService {
                         .district(district)
                         .build()));
 
-        // ② currentTown 필드 갱신
+        // currentTown 필드 갱신
         member.setCurrentTown(town);
         memberRepository.save(member);
 
