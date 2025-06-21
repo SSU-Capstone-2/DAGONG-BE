@@ -168,6 +168,7 @@ public class GroupPurchaseController {
     }
 
     
+
     // 내가 올린 공구 API
     @Operation(summary = "내가 등록한 공구 목록", description = "사용자가 등록한 공구를 최신순으로 페이징 조회하는 API입니다.")
     @Parameters(
