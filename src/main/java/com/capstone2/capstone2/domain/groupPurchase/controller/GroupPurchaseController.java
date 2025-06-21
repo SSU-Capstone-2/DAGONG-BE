@@ -198,6 +198,7 @@ public class GroupPurchaseController {
         Page<GroupPurchaseResponse.GroupPurchaseListDTO> result =
                 groupPurchaseService.getParticipatingPurchases(memberId, page, size);
 
+        
         return ApiResponse.onSuccess(SuccessStatus.GROUP_PURCHASE_PARTICIPATING_OK, result);
     }
 }
