@@ -14,7 +14,7 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI DagongAPI() {
         Info info = new Info()
-                .title("Dagong Swagger")
+                .title("Capstone2-Dagong Swagger")
                 .description("Capstone2 server Swagger")
                 .version("1.0.0");
 
