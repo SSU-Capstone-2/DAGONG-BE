@@ -39,7 +39,7 @@ public class AuthController {
 //        return ApiResponse.onSuccess(SuccessStatus.USER_EMAIL_LOGIN_OK, responseDto);
 //    }
     @GetMapping("/login/kakao")
-    @Operation(summary = "kakao login (JSON)", description = "인가 코드로 JWT 교환 후 JSON 반환")
+    @Operation(summary = "kakao login (JSON)", description = "인가 코드로 JWT 교환 후 JSON 반환!")
     public ApiResponse<LoginResponseDTO> kakaoLoginJson(
             @RequestParam("code") String accessCode) {
         Member member = authService.oAuthLogin(accessCode);
