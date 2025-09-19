@@ -31,7 +31,7 @@ import java.io.IOException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
-@Tag(name = "KAKAO TEST API", description = "KAKAO TEST용 API 입니다.")
+@Tag(name = "KAKAO TEST API", description = "KAKAO TEST용 API 입니다...")
 public class KakaoTestController {
 
     private final AuthService authService;
