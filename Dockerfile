@@ -1,4 +1,5 @@
-FROM openjdk:17
+# FROM openjdk:17
+FROM eclipse-temurin:17-jdk
 LABEL authors="minseok-kim"
 # 애플리케이션 JAR 파일을 컨테이너로 복사
 ARG JAR_FILE=./build/libs/*.jar
