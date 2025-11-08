@@ -15,7 +15,7 @@ public class MemberConverter {
     }
 
     // 테스트용: token을 함께 반환
-    // 재배포를 위한 주석 추가
+    // 재배포를 위한 주석 추가!
     public static MemberResponseDTO.JoinResultDTO toJoinResultDTO_WithToken(Member m, String jwtToken) {
         return MemberResponseDTO.JoinResultDTO.builder()
                 .id(m.getId())
